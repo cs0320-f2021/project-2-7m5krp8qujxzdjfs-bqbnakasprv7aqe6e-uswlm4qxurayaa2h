@@ -8,7 +8,8 @@ let PAGE_MAP = {}
 let VOICE_SYNTH = window.speechSynthesis
 
 // global for current index
-let CURRENT_INDEX = 0
+// NOTE: will need to update based on elements (controls) we insert into the page
+let CURRENT_INDEX = 1
 
 let CURRENT_ELEMENT = {
     setAndSpeak: function(newElement) { //async
@@ -22,6 +23,11 @@ let CURRENT_ELEMENT = {
 
 window.onload = () => {
     // TODO: initialize Speech API object, inject HTML, get page elements, and initialize event listeners
+    const sr = document.createElement("p")
+    // TODO: make sticky!
+    sr.innerHTML =`<div id="sr" style="float: right"> Screenreader </div>`
+    document.body.insertBefore(sr, document.body.firstChild)
+    //document.body.innerHTML += `<div id="sr" style="position: sticky; top: 0px; right: 0px;"> Screenreader </div>`
     mapPage()
 
     window.addEventListener("keydown", (event) => {
