@@ -10,9 +10,10 @@ let VOICE_SYNTH = window.speechSynthesis
 // global for current index
 // NOTE: will need to update based on elements (controls) we insert into the page
 let CURRENT_INDEX = 1
+// let SHOULD_READ = false
 
 let CURRENT_ELEMENT = {
-    setAndSpeak: function(newElement) { //async
+    setAndSpeak: async function(newElement) { //async
         if (newElement.style.hidden !== true && newElement.style.visibility !== "none") {
             this.value = newElement
             VOICE_SYNTH.speak(new SpeechSynthesisUtterance(newElement.innerHTML));
@@ -21,25 +22,42 @@ let CURRENT_ELEMENT = {
     value: null
 }
 
+
+//https://stackoverflow.com/questions/29173956/start-and-stop-loop-in-javascript-with-start-and-stop-button
+let READER = {
+    should_read : false,
+    run : function() {
+        for (let i = CURRENT_INDEX; i < ALL_ELEMENTS.length; i++) {
+            const newElement = ALL_ELEMENTS[CURRENT_INDEX]
+            CURRENT_ELEMENT.setAndSpeak(newElement)
+                .then((response) => {
+                    if (!this.should_read) {
+                        break
+                    }
+                })
+        }
+    },
+    startReading : function () {
+        this.should_read = true
+    },
+    stopReading : function () {
+        this.should_read = false
+    }
+}
+
 window.onload = () => {
     // TODO: initialize Speech API object, inject HTML, get page elements, and initialize event listeners
-    const sr = document.createElement("p")
-    // TODO: make sticky!
-    sr.innerHTML =`<div id="sr" style="float: right"> Screenreader </div>`
-    document.body.insertBefore(sr, document.body.firstChild)
-    //document.body.innerHTML += `<div id="sr" style="position: sticky; top: 0px; right: 0px;"> Screenreader </div>`
+
+    // map out the page
     mapPage()
 
-    window.addEventListener("keydown", (event) => {
-        if (event.key === " ") {
-            event.preventDefault()
-            //const currentIndex = PAGE_MAP[CURRENT_ELEMENT.value.id]
-            const newElement = ALL_ELEMENTS[CURRENT_INDEX]
-            CURRENT_INDEX += 1
-            CURRENT_ELEMENT.setAndSpeak(newElement)
-                //.then(response => console.log(response))
-        }
-    })
+    // inject html elements **after mapping out the page
+    injectHtml()
+
+    // start while loop that will listen for button inputs
+    READER.run()
+
+
 }
 
 const mapPage = () => {
@@ -55,6 +73,26 @@ const mapPage = () => {
         PAGE_MAP[currentElement.id] = i
     }
 
+}
+
+const injectHtml = () => {
+    // TODO: make sticky!
+    //document.body.innerHTML += `<div id="sr" style="position: sticky; top: 0px; right: 0px;"> Screenreader </div>`
+    const sr = document.createElement("p")
+    sr.innerHTML =`<div id="sr" style="float: right"> <button id="read-page">Read Page</button> <button id="stop-reading">Stop Reading</button> </div>`
+    document.body.insertBefore(sr, document.body.firstChild)
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+    document.getElementById("read-page").addEventListener("click", () => {
+        READER.startReading()
+        READER.run()
+        console.log("start")
+    })
+
+    document.getElementById("stop-reading").addEventListener("click", () => {
+        READER.stopReading()
+        console.log("stop")
+    })
 }
 
 
