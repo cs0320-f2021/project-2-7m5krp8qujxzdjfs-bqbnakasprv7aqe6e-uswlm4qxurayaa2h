@@ -75,7 +75,6 @@ const mapPage = () => {
 
     for (let i = 0; i < ALL_ELEMENTS.length; i++) {
         const currentElement = ALL_ELEMENTS[i]
-        // TODO: Things with ids are getting added to ALL_ELEMENTS twice for some reason
         if (!currentElement.id) {
             currentElement.id = i
         }
