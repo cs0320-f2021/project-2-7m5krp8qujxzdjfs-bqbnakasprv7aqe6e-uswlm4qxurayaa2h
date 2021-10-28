@@ -9,8 +9,8 @@ let VOICE_SYNTH = window.speechSynthesis
 
 // global for current index
 // NOTE: will need to update based on elements (controls) we insert into the page
-let CURRENT_INDEX = 1
-// let SHOULD_READ = false
+let CURRENT_INDEX = 4
+let READING_LOOP = null;
 
 let CURRENT_ELEMENT = {
     setAndSpeak: async function(newElement) { //async
@@ -23,28 +23,6 @@ let CURRENT_ELEMENT = {
 }
 
 
-//https://stackoverflow.com/questions/29173956/start-and-stop-loop-in-javascript-with-start-and-stop-button
-let READER = {
-    should_read : false,
-    run : function() {
-        for (let i = CURRENT_INDEX; i < ALL_ELEMENTS.length; i++) {
-            const newElement = ALL_ELEMENTS[CURRENT_INDEX]
-            CURRENT_ELEMENT.setAndSpeak(newElement)
-                .then((response) => {
-                    if (!this.should_read) {
-                        break
-                    }
-                })
-        }
-    },
-    startReading : function () {
-        this.should_read = true
-    },
-    stopReading : function () {
-        this.should_read = false
-    }
-}
-
 window.onload = () => {
     // TODO: initialize Speech API object, inject HTML, get page elements, and initialize event listeners
 
@@ -53,12 +31,8 @@ window.onload = () => {
 
     // inject html elements **after mapping out the page
     injectHtml()
-
-    // start while loop that will listen for button inputs
-    READER.run()
-
-
 }
+
 
 const mapPage = () => {
     if (ALL_ELEMENTS.length === 0) {
@@ -84,13 +58,22 @@ const injectHtml = () => {
 
     // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
     document.getElementById("read-page").addEventListener("click", () => {
-        READER.startReading()
-        READER.run()
+        READING_LOOP = setInterval(function () {
+            let newElement = ALL_ELEMENTS[CURRENT_INDEX];
+            CURRENT_ELEMENT.setAndSpeak(newElement)
+                // .then((response) => console.log(response))
+            CURRENT_INDEX++;
+            if (CURRENT_INDEX === ALL_ELEMENTS.length) {
+                CURRENT_INDEX = 4;
+                VOICE_SYNTH.speak(new SpeechSynthesisUtterance("This is the end of the page. Now restarting."))
+            }
+        }, 1);
         console.log("start")
     })
 
+    // set up stop reading button
     document.getElementById("stop-reading").addEventListener("click", () => {
-        READER.stopReading()
+        clearInterval(READING_LOOP);
         console.log("stop")
     })
 }
