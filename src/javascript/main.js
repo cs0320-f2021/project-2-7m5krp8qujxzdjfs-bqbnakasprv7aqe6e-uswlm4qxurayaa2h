@@ -9,18 +9,21 @@ let VOICE_SYNTH = window.speechSynthesis
 
 // global for current index
 // NOTE: will need to update based on elements (controls) we insert into the page
-let CURRENT_INDEX = 4
-let READING_LOOP = null;
+let CURRENT_INDEX = 3
+let SHOULD_READ = false
 
 let CURRENT_ELEMENT = {
     setAndSpeak: async function(newElement) {
         if (newElement.style.hidden !== true && newElement.style.visibility !== "none") {
             this.value = newElement
-            let handler = HANDLERS[ROLES[newElement.tagName]]
+            // let handler = HANDLERS[ROLES[newElement.tagName]]
             // let handlerResult = handler()
             let handlerResult = newElement.innerHTML //TEMP CODE
-            VOICE_SYNTH.speak(new SpeechSynthesisUtterance(handlerResult))
-            await (VOICE_SYNTH.speaking === false)
+            let audio = new SpeechSynthesisUtterance(handlerResult)
+            VOICE_SYNTH.speak(audio)
+            return new Promise(resolve => {
+                audio.onend = resolve
+            })
         }
 
     },
@@ -34,6 +37,34 @@ window.onload = () => {
 
     // inject html elements **after mapping out the page
     injectHtml()
+
+    let checkReading = async function () {
+        return SHOULD_READ
+    }
+
+    document.getElementById("read-page").addEventListener("click", () => {
+        console.log("start")
+        SHOULD_READ = true
+        READING_LOOP = async function () {
+            for (CURRENT_INDEX; CURRENT_INDEX < ALL_ELEMENTS.length; CURRENT_INDEX++) {
+                if (await checkReading()) {
+                    console.log(CURRENT_INDEX)
+                    let newElement = ALL_ELEMENTS[CURRENT_INDEX]
+                    await CURRENT_ELEMENT.setAndSpeak(newElement)
+                } else {
+                    console.log("Reading stopped")
+                    break
+                }
+            }
+        }
+        READING_LOOP()
+    })
+
+    document.getElementById("stop-reading").addEventListener("click", () => {
+        console.log("stop")
+        SHOULD_READ = false
+    })
+
 }
 
 
@@ -44,6 +75,7 @@ const mapPage = () => {
 
     for (let i = 0; i < ALL_ELEMENTS.length; i++) {
         const currentElement = ALL_ELEMENTS[i]
+        // TODO: Things with ids are getting added to ALL_ELEMENTS twice for some reason
         if (!currentElement.id) {
             currentElement.id = i
         }
@@ -55,34 +87,11 @@ const mapPage = () => {
 const injectHtml = () => {
     // TODO: make sticky!
     //document.body.innerHTML += `<div id="sr" style="position: sticky; top: 0px; right: 0px;"> Screenreader </div>`
-    const sr = document.createElement("p")
-    sr.innerHTML =`<div id="sr" style="float: right"> <button id="read-page">Read Page</button> <button id="stop-reading">Stop Reading</button> </div>`
+    const sr = document.createElement("div")
+    sr.style.float = 'right'
+    sr.id = 'sr'
+    sr.innerHTML =`<button id="read-page">Read Page</button> <button id="stop-reading">Stop Reading</button>`
     document.body.insertBefore(sr, document.body.firstChild)
-
-    // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
-    document.getElementById("read-page").addEventListener("click", () => {
-        READING_LOOP = setInterval(function () {
-            console.log(CURRENT_INDEX);
-            let newElement = ALL_ELEMENTS[CURRENT_INDEX];
-            CURRENT_ELEMENT.setAndSpeak(newElement)
-                .then((speaking) => {
-                    if (!speaking) {
-                        CURRENT_INDEX++;
-                        if (CURRENT_INDEX === ALL_ELEMENTS.length) {
-                            CURRENT_INDEX = 4;
-                            VOICE_SYNTH.speak(new SpeechSynthesisUtterance("This is the end of the page. Now restarting."))
-                        }
-                    }
-                })
-        }, 3000);
-        console.log("start")
-    })
-
-    // set up stop reading button
-    document.getElementById("stop-reading").addEventListener("click", () => {
-        clearInterval(READING_LOOP);
-        console.log("stop")
-    })
 }
 
 
