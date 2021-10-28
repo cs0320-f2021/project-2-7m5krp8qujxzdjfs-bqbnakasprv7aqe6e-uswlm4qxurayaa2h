@@ -13,20 +13,23 @@ let CURRENT_INDEX = 4
 let READING_LOOP = null;
 
 let CURRENT_ELEMENT = {
-    setAndSpeak: async function(newElement) { //async
+    setAndSpeak: async function(newElement) {
         if (newElement.style.hidden !== true && newElement.style.visibility !== "none") {
             this.value = newElement
-            VOICE_SYNTH.speak(new SpeechSynthesisUtterance(newElement.innerHTML));
+            let handler = HANDLERS[ROLES[newElement.tagName]]
+            // let handlerResult = handler()
+            let handlerResult = newElement.innerHTML //TEMP CODE
+            VOICE_SYNTH.speak(new SpeechSynthesisUtterance(handlerResult))
+            await (VOICE_SYNTH.speaking === false)
         }
+
     },
     value: null
 }
 
 
 window.onload = () => {
-    // TODO: initialize Speech API object, inject HTML, get page elements, and initialize event listeners
-
-    // map out the page
+    // map out the page to fill out PAGE_MAP array
     mapPage()
 
     // inject html elements **after mapping out the page
@@ -59,15 +62,19 @@ const injectHtml = () => {
     // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
     document.getElementById("read-page").addEventListener("click", () => {
         READING_LOOP = setInterval(function () {
+            console.log(CURRENT_INDEX);
             let newElement = ALL_ELEMENTS[CURRENT_INDEX];
             CURRENT_ELEMENT.setAndSpeak(newElement)
-                // .then((response) => console.log(response))
-            CURRENT_INDEX++;
-            if (CURRENT_INDEX === ALL_ELEMENTS.length) {
-                CURRENT_INDEX = 4;
-                VOICE_SYNTH.speak(new SpeechSynthesisUtterance("This is the end of the page. Now restarting."))
-            }
-        }, 1);
+                .then((speaking) => {
+                    if (!speaking) {
+                        CURRENT_INDEX++;
+                        if (CURRENT_INDEX === ALL_ELEMENTS.length) {
+                            CURRENT_INDEX = 4;
+                            VOICE_SYNTH.speak(new SpeechSynthesisUtterance("This is the end of the page. Now restarting."))
+                        }
+                    }
+                })
+        }, 3000);
         console.log("start")
     })
 
@@ -80,6 +87,13 @@ const injectHtml = () => {
 
 
 // maps element categories to reading handlers (return strings)
-const HANDLERS = {}
+const HANDLERS = {
+    textHandler : () => {},
+    linkHandler : () => {}
+}
 // maps element tag names to element categories
-const ROLES = {}
+const ROLES = {
+    div : textHandler,
+    p : textHandler,
+    a : linkHandler
+}
