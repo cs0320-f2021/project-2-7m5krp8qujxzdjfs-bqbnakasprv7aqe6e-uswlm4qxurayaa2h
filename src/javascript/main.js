@@ -13,13 +13,11 @@ let CURRENT_INDEX = 3
 let SHOULD_READ = false
 
 let CURRENT_ELEMENT = {
-    setAndSpeak: async function(newElement) {
+    setAndSpeak: async function (newElement) {
         if (newElement.style.hidden !== true && newElement.style.visibility !== "none") {
             this.value = newElement
-            // let handler = HANDLERS[ROLES[newElement.tagName]]
-            // let handlerResult = handler()
-            let handlerResult = newElement.innerHTML //TEMP CODE
-            let audio = new SpeechSynthesisUtterance(handlerResult)
+            let handler = HANDLERS[ROLES[newElement.tagName]]
+            let audio = new SpeechSynthesisUtterance(handler(newElement))
             VOICE_SYNTH.speak(audio)
             return new Promise(resolve => {
                 audio.onend = resolve
@@ -45,7 +43,7 @@ window.onload = () => {
     document.getElementById("read-page").addEventListener("click", () => {
         console.log("start")
         SHOULD_READ = true
-        READING_LOOP = async function () {
+        let READING_LOOP = async function () {
             for (CURRENT_INDEX; CURRENT_INDEX < ALL_ELEMENTS.length; CURRENT_INDEX++) {
                 if (await checkReading()) {
                     console.log(CURRENT_INDEX)
@@ -57,7 +55,11 @@ window.onload = () => {
                 }
             }
         }
-        READING_LOOP()
+        READING_LOOP().then(() => {
+            console.log("Loop restarting")
+            CURRENT_INDEX = 3
+        })
+        //
     })
 
     document.getElementById("stop-reading").addEventListener("click", () => {
@@ -89,19 +91,60 @@ const injectHtml = () => {
     const sr = document.createElement("div")
     sr.style.float = 'right'
     sr.id = 'sr'
-    sr.innerHTML =`<button id="read-page">Read Page</button> <button id="stop-reading">Stop Reading</button>`
+    sr.innerHTML = `<button id="read-page">Read Page</button> <button id="stop-reading">Stop Reading</button>`
     document.body.insertBefore(sr, document.body.firstChild)
 }
 
 
 // maps element categories to reading handlers (return strings)
+// TODO: Read out title??
+//TODO dealing with color?
 const HANDLERS = {
-    textHandler : () => {},
-    linkHandler : () => {}
+    "text-only": function textOnlyHandler(element) {
+        return element.innerHTML;
+    },
+    "text-with-tag": function textWithTagHandler(element) {
+        return "Now reading a: " + element.tagName + " . " + element.innerHTML;
+    },
+    "invisible": function invisibleHandler(element) {
+        return "";
+    },
+    "link": function linkHandler(element) {
+        return "Link: " + element.innerHTML + " This link goes to: " + element.href; //TODO just reading part of the link out
+    },
+    "button": function buttonHandler(element) {
+        return "This is a button that says " + element.innerHTML;
+    },
+    "nav": function navHandler(element) {
+        return "This is a navigation pane.";
+    },
+    "caption": function captionHandler(element) {
+        return "Caption: " + element.innerHTML;
+    }
+
 }
 // maps element tag names to element categories
 const ROLES = {
-    div : textHandler,
-    p : textHandler,
-    a : linkHandler
+    "div": "text-only",
+    "p": "text-only",
+
+    "aside": "text-with-tag",
+    "header": "text-with-tag",
+    "footer": "text-with-tag",
+    "blockquote" : "text-with-tag",
+
+    "script": "invisible",
+    "article": "invisible",
+    "main": "invisible",
+    "section": "invisible",
+    "cite" : "invisible",
+
+    "figcaption" : "caption",
+    "caption" : "caption",
+
+    "a": "link",
+    "nav": "nav",
+    "button": "button",
+    "input": "input"
+    //TODO the rest of the elements, and make sure this works
 }
