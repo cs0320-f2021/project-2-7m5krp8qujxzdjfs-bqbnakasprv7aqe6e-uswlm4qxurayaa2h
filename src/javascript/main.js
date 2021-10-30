@@ -138,8 +138,12 @@ const injectHtml = () => {
 // maps element categories to reading handlers (return strings)
 // TODO: Read out title??
 //TODO dealing with color?
-const HANDLERS = {
+let HANDLERS;
+HANDLERS = {
     "text-only": function textOnlyHandler(element) {
+        console.log("text-only")
+        console.log(element)
+        console.log(element.innerHTML)
         return element.innerHTML;
     },
     "text-with-tag": function textWithTagHandler(element) {
@@ -153,7 +157,15 @@ const HANDLERS = {
         return "";
     },
     "link": function linkHandler(element) {
-        return "Link: " + element.innerHTML + " This link goes to: " + element.href; //TODO just reading part of the link out
+        console.log("link handled")
+        console.log(element.href)
+        if (element.innerHTML !== element.href) {
+            //TODO just reading part of the link out
+            return "Link: " + element.innerHTML + " This link goes to: " + element.href;
+        } else {
+            return "Link to: " + element.href;
+        }
+
     },
     "button": function buttonHandler(element) {
         return "This is a button that says " + element.innerHTML;
@@ -166,10 +178,14 @@ const HANDLERS = {
     },
     "image": function imageHandler(element) {
         if (element.alt) {
-            return "There is an image here displaying a: " + element.alt;
+            return "There is an image here displaying a " + element.alt;
         } else {
             return "There is an image here.";
         }
+    },
+    // TODO enumerate different types (e.g. color, datetime-local)/enrich?
+    "input": function inputHandler(element) {
+        return "There is an interactive " + element.type + " element here.";
     },
     "canvas": function canvasHandler(element) {
         if (!(element.innerHTML.trim === "")) {
@@ -177,36 +193,57 @@ const HANDLERS = {
         } else {
             return "There is a graphic here."
         }
+    },
+    // sometimes <p> then <ul> => doesn't make sense
+    // "unordered-list": function uListHandler(element) {
+    //     return "This is an unordered list.";
+    // }
+    // TODO handle properly -- connect to associated element
+    "label": function labelHandler(element) {
+        return "There is a label here. It says " + element.innerHTML;
+    },
+    "table": function tableHandler(element) {
+        return "There is a table here.";
     }
 
-}
+};
 // maps element tag names to element categories
 const ROLES = {
     "div": "text-only",
     "p": "text-only",
+    "li": "text-only",
+    "ul": "text-only",
+    "ol": "text-only", // want to add more information here?
 
     "aside": "text-with-tag",
     "header": "text-with-tag",
     "footer": "text-with-tag",
-    "blockquote" : "text-with-tag",
+    "blockquote": "text-with-tag",
 
     "script": "invisible",
     "article": "invisible",
     "main": "invisible",
     "section": "invisible",
-    "cite" : "invisible",
-    "figure" : "invisible",
+    "cite": "invisible",
+    "figure": "invisible",
 
-    "figcaption" : "caption",
-    "caption" : "caption",
+    "figcaption": "caption",
+    "caption": "caption",
 
-    "a" : "link",
-    "nav" : "nav",
-    "button" : "button",
-    "input" : "input",
+    "canvas": "canvas",
+    "svg": "canvas",
 
-    "image" : "image",
-    "canvas" : "canvas",
-    "svg" : "canvas"
+    "image": "image",
+    "a": "link",
+    "nav": "nav",
+    "button": "button",
+    "input": "input",
+    "label": "label",
+
+    "table": "table"
+
+
+
+    // "ul": "unordered-list"
     //TODO the rest of the elements, and make sure this works
 }
