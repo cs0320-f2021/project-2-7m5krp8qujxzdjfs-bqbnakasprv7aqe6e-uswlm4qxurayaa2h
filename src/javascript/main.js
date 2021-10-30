@@ -13,9 +13,14 @@ let CURRENT_INDEX = 3
 let SHOULD_READ = false
 
 let CURRENT_ELEMENT = {
+    // TODO add highlight color parameter
     setAndSpeak: async function (newElement) {
+        this.value = newElement
         if (newElement.style.hidden !== true && newElement.style.visibility !== "none") {
             this.value = newElement
+            newElement.style['background-color'] = "yellow"
+            newElement.style['text-decoration'] = "underline"
+            newElement.style['color'] = "black"
             let handler = HANDLERS[ROLES[newElement.tagName.toLowerCase()]]
             let audio = new SpeechSynthesisUtterance(handler(newElement))
             VOICE_SYNTH.speak(audio)
@@ -28,12 +33,13 @@ let CURRENT_ELEMENT = {
     value: null
 }
 
+
 window.onload = () => {
+    // inject html elements before mapping out the page
+    injectHtml()
+
     // map out the page to fill out PAGE_MAP array
     mapPage()
-
-    // inject html elements **after mapping out the page
-    injectHtml()
 
     let checkReading = async function () {
         return SHOULD_READ
@@ -54,6 +60,9 @@ window.onload = () => {
                     console.log(CURRENT_INDEX)
                     let newElement = ALL_ELEMENTS[CURRENT_INDEX]
                     await CURRENT_ELEMENT.setAndSpeak(newElement)
+                    newElement.style['background-color'] = ""
+                    newElement.style['text-decoration'] = ""
+                    newElement.style['color'] = ""
                 } else {
                     console.log("Reading stopped")
                     break
@@ -77,18 +86,22 @@ window.onload = () => {
         SHOULD_READ = false
     })
 
-    window.addEventListener("keydown", (event) => {
+    window.addEventListener("keydown", async (event) => {
         let newElement;
+        // potentially leave highlighting until restarting
         switch (event.key) {
             case "ArrowLeft" :
                 event.preventDefault()
                 VOICE_SYNTH.cancel();
                 console.log("Going back")
                 SHOULD_READ = false
-                CURRENT_INDEX = CURRENT_INDEX - 1
+                CURRENT_INDEX = PAGE_MAP[CURRENT_ELEMENT.value.id] - 1
                 console.log(CURRENT_INDEX)
                 newElement = ALL_ELEMENTS[CURRENT_INDEX]
-                CURRENT_ELEMENT.setAndSpeak(newElement)
+                await CURRENT_ELEMENT.setAndSpeak(newElement)
+                newElement.style['background-color'] = ""
+                newElement.style['text-decoration'] = ""
+                newElement.style['color'] = ""
                 // SHOULD_READ = true
                 break;
             case "ArrowRight" :
@@ -96,17 +109,17 @@ window.onload = () => {
                 VOICE_SYNTH.cancel()
                 console.log("Going forward")
                 SHOULD_READ = false
-                CURRENT_INDEX = CURRENT_INDEX + 1
+                CURRENT_INDEX = PAGE_MAP[CURRENT_ELEMENT.value.id] + 1
                 console.log(CURRENT_INDEX)
                 newElement = ALL_ELEMENTS[CURRENT_INDEX]
-                CURRENT_ELEMENT.setAndSpeak(newElement)
+                await CURRENT_ELEMENT.setAndSpeak(newElement)
+                newElement.style['background-color'] = ""
+                newElement.style['text-decoration'] = ""
+                newElement.style['color'] = ""
                 // SHOULD_READ = true
                 break;
         }
     })
-
-
-
 }
 
 const mapPage = () => {
@@ -203,7 +216,21 @@ HANDLERS = {
         return "There is a label here. It says " + element.innerHTML;
     },
     "table": function tableHandler(element) {
-        return "There is a table here.";
+        return "There is a table here." + element.innerHTML;
+    },
+    "th": function tableHeaderHandler(element) {
+        if (element.scope) {
+            if (element.scope === "col") {
+                return "This is a column header. It says " + element.innerHTML;
+            } else {
+                return "This is a " + element.scope + " header. It says " + element.innerHTML;
+            }
+        } else {
+            return "This is a header. It says " + element.innerHTML;
+        }
+    },
+    "td": function tableDataHandler(element) {
+        return "The data in this cell says " + element.innerHTML;
     }
 
 };
@@ -240,7 +267,10 @@ const ROLES = {
     "input": "input",
     "label": "label",
 
-    "table": "table"
+    "table": "table",
+    "th": "th",
+    "td": "td",
+    "tfoot": "tfoot"
 
 
 
