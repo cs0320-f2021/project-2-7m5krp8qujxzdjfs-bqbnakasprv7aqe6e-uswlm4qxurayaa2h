@@ -16,7 +16,7 @@ let CURRENT_ELEMENT = {
     setAndSpeak: async function (newElement) {
         if (newElement.style.hidden !== true && newElement.style.visibility !== "none") {
             this.value = newElement
-            let handler = HANDLERS[ROLES[newElement.tagName]]
+            let handler = HANDLERS[ROLES[newElement.tagName.toLowerCase()]]
             let audio = new SpeechSynthesisUtterance(handler(newElement))
             VOICE_SYNTH.speak(audio)
             return new Promise(resolve => {
@@ -27,7 +27,6 @@ let CURRENT_ELEMENT = {
     },
     value: null
 }
-
 
 window.onload = () => {
     // map out the page to fill out PAGE_MAP array
@@ -42,8 +41,14 @@ window.onload = () => {
 
     document.getElementById("read-page").addEventListener("click", () => {
         console.log("start")
+        // if (!SHOULD_READ) -- idea to handle multiple "read page" clicks (potentially return to later) -- messes up checkReading
         SHOULD_READ = true
+        // restart reading page if at the end
+        if (CURRENT_INDEX === ALL_ELEMENTS.length - 1) {
+            CURRENT_INDEX = 3
+        }
         let READING_LOOP = async function () {
+            console.log(ALL_ELEMENTS.length)
             for (CURRENT_INDEX; CURRENT_INDEX < ALL_ELEMENTS.length; CURRENT_INDEX++) {
                 if (await checkReading()) {
                     console.log(CURRENT_INDEX)
@@ -54,11 +59,16 @@ window.onload = () => {
                     break
                 }
             }
+            // return new Promise(() => {
+            //     console.log("promise")
+            //     return CURRENT_INDEX === ALL_ELEMENTS.length - 1
+            // })
         }
-        READING_LOOP().then(() => {
-            console.log("Loop restarting")
-            CURRENT_INDEX = 3
-        })
+        READING_LOOP()
+        // READING_LOOP().then(() => {
+        //     console.log("Loop restarting")
+        //     CURRENT_INDEX = 3
+        // })
         //
     })
 
@@ -67,8 +77,37 @@ window.onload = () => {
         SHOULD_READ = false
     })
 
-}
+    window.addEventListener("keydown", (event) => {
+        let newElement;
+        switch (event.key) {
+            case "ArrowLeft" :
+                event.preventDefault()
+                VOICE_SYNTH.cancel();
+                console.log("Going back")
+                SHOULD_READ = false
+                CURRENT_INDEX = CURRENT_INDEX - 1
+                console.log(CURRENT_INDEX)
+                newElement = ALL_ELEMENTS[CURRENT_INDEX]
+                CURRENT_ELEMENT.setAndSpeak(newElement)
+                // SHOULD_READ = true
+                break;
+            case "ArrowRight" :
+                event.preventDefault()
+                VOICE_SYNTH.cancel()
+                console.log("Going forward")
+                SHOULD_READ = false
+                CURRENT_INDEX = CURRENT_INDEX + 1
+                console.log(CURRENT_INDEX)
+                newElement = ALL_ELEMENTS[CURRENT_INDEX]
+                CURRENT_ELEMENT.setAndSpeak(newElement)
+                // SHOULD_READ = true
+                break;
+        }
+    })
 
+
+
+}
 
 const mapPage = () => {
     if (ALL_ELEMENTS.length === 0) {
@@ -104,7 +143,11 @@ const HANDLERS = {
         return element.innerHTML;
     },
     "text-with-tag": function textWithTagHandler(element) {
-        return "Now reading a: " + element.tagName + " . " + element.innerHTML;
+        if (element === "aside") {
+            return "Now reading an " + element.tagName + " . " + element.innerHTML;
+        } else {
+            return "Now reading a " + element.tagName + " . " + element.innerHTML;
+        }
     },
     "invisible": function invisibleHandler(element) {
         return "";
@@ -120,6 +163,20 @@ const HANDLERS = {
     },
     "caption": function captionHandler(element) {
         return "Caption: " + element.innerHTML;
+    },
+    "image": function imageHandler(element) {
+        if (element.alt) {
+            return "There is an image here displaying a: " + element.alt;
+        } else {
+            return "There is an image here.";
+        }
+    },
+    "canvas": function canvasHandler(element) {
+        if (!(element.innerHTML.trim === "")) {
+            return "There is a graphic here displaying: " + element.innerHTML;
+        } else {
+            return "There is a graphic here."
+        }
     }
 
 }
@@ -138,13 +195,18 @@ const ROLES = {
     "main": "invisible",
     "section": "invisible",
     "cite" : "invisible",
+    "figure" : "invisible",
 
     "figcaption" : "caption",
     "caption" : "caption",
 
-    "a": "link",
-    "nav": "nav",
-    "button": "button",
-    "input": "input"
+    "a" : "link",
+    "nav" : "nav",
+    "button" : "button",
+    "input" : "input",
+
+    "image" : "image",
+    "canvas" : "canvas",
+    "svg" : "canvas"
     //TODO the rest of the elements, and make sure this works
 }
