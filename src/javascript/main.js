@@ -12,23 +12,36 @@ let VOICE_SYNTH = window.speechSynthesis
 let CURRENT_INDEX = 3
 let SHOULD_READ = false
 
+function highlightElement(e) {
+    e.style['background-color'] = "yellow"
+    e.style['text-decoration'] = "underline"
+    e.style['color'] = "black"
+}
+
+function unhighlightElement(e) {
+    e.style['background-color'] = ""
+    e.style['text-decoration'] = ""
+    e.style['color'] = ""
+}
+
 let CURRENT_ELEMENT = {
     // TODO add highlight color parameter
     setAndSpeak: async function (newElement) {
         this.value = newElement
         if (newElement.style.hidden !== true && newElement.style.visibility !== "none") {
             this.value = newElement
-            newElement.style['background-color'] = "yellow"
-            newElement.style['text-decoration'] = "underline"
-            newElement.style['color'] = "black"
+            unhighlightElement(newElement)
             let handler = HANDLERS[ROLES[newElement.tagName.toLowerCase()]]
-            let audio = new SpeechSynthesisUtterance(handler(newElement))
-            VOICE_SYNTH.speak(audio)
-            return new Promise(resolve => {
-                audio.onend = resolve
-            })
+            let speakString = handler(newElement)
+            if (speakString !== "") {
+                highlightElement(newElement)
+                let audio = new SpeechSynthesisUtterance(speakString)
+                VOICE_SYNTH.speak(audio)
+                return new Promise(resolve => {
+                    audio.onend = resolve
+                })
+            }
         }
-
     },
     value: null
 }
@@ -58,12 +71,12 @@ window.onload = () => {
             for (CURRENT_INDEX; CURRENT_INDEX < ALL_ELEMENTS.length; CURRENT_INDEX++) {
                 if (await checkReading()) {
                     console.log(CURRENT_INDEX)
+                    // in case we had just been stopped, unhighlight the previous thing
+                    unhighlightElement(CURRENT_ELEMENT.value)
                     let newElement = ALL_ELEMENTS[CURRENT_INDEX]
                     await CURRENT_ELEMENT.setAndSpeak(newElement)
-                    newElement.style['background-color'] = ""
-                    newElement.style['text-decoration'] = ""
-                    newElement.style['color'] = ""
                 } else {
+                    highlightElement(CURRENT_ELEMENT.value)
                     console.log("Reading stopped")
                     break
                 }
@@ -89,6 +102,9 @@ window.onload = () => {
                 console.log("Going back")
                 SHOULD_READ = false
 
+                // in case we had just been stopped
+                unhighlightElement(CURRENT_ELEMENT.value)
+
                 // get the element before the one that's currently being read out
                 CURRENT_INDEX = PAGE_MAP[CURRENT_ELEMENT.value.id] - 1
                 console.log(CURRENT_INDEX)
@@ -100,10 +116,22 @@ window.onload = () => {
 
                 // speak and then unhighlight this element
                 newElement = ALL_ELEMENTS[CURRENT_INDEX]
+
+                // skip over invisible elements
+                // TODO make cleaner
+                while (ROLES[newElement.tagName.toLowerCase()] === "invisible") {
+                    CURRENT_INDEX -= 1
+
+                    if (CURRENT_INDEX < 3) {
+                        CURRENT_INDEX = 3
+                        newElement = ALL_ELEMENTS[CURRENT_INDEX]
+                        break;
+                    }
+                    newElement = ALL_ELEMENTS[CURRENT_INDEX]
+                }
+
                 await CURRENT_ELEMENT.setAndSpeak(newElement)
-                newElement.style['background-color'] = ""
-                newElement.style['text-decoration'] = ""
-                newElement.style['color'] = ""
+                // unhighlightElement(newElement)
                 break;
             case "ArrowRight" :
                 // cancel the voice and prevent default
@@ -111,6 +139,9 @@ window.onload = () => {
                 VOICE_SYNTH.cancel()
                 console.log("Going forward")
                 SHOULD_READ = false
+
+                // in case we had just been stopped
+                unhighlightElement(CURRENT_ELEMENT.value)
 
                 // get the element before the one that's currently being read out
                 CURRENT_INDEX = PAGE_MAP[CURRENT_ELEMENT.value.id] + 1
@@ -123,10 +154,19 @@ window.onload = () => {
 
                 // speak and then unhighlight this element
                 newElement = ALL_ELEMENTS[CURRENT_INDEX]
+
+                while (ROLES[newElement.tagName.toLowerCase()] === "invisible") {
+                    CURRENT_INDEX += 1
+
+                    if (CURRENT_INDEX >= ALL_ELEMENTS.length) {
+                        CURRENT_INDEX = ALL_ELEMENTS.length - 1
+                        newElement = ALL_ELEMENTS[CURRENT_INDEX]
+                        break;
+                    }
+                }
+
                 await CURRENT_ELEMENT.setAndSpeak(newElement)
-                newElement.style['background-color'] = ""
-                newElement.style['text-decoration'] = ""
-                newElement.style['color'] = ""
+                // unhighlightElement(newElement)
                 break;
         }
     })
@@ -144,6 +184,9 @@ const mapPage = () => {
         }
         PAGE_MAP[currentElement.id] = i
     }
+
+    // initialize CURRENT_ELEMENT to be the first thing in the page
+    CURRENT_ELEMENT.value = ALL_ELEMENTS[3]
 
 }
 
@@ -221,9 +264,12 @@ HANDLERS = {
         }
     },
     // sometimes <p> then <ul> => doesn't make sense
-    // "unordered-list": function uListHandler(element) {
-    //     return "This is an unordered list.";
-    // }
+    "unordered-list": function unorderedListHandler(element) {
+        return "This is a list.";
+    },
+    "ordered-list": function orderedListHandler(element) {
+        return "This is an ordered list.";
+    },
     // TODO handle properly -- connect to associated element
     "label": function labelHandler(element) {
         return "There is a label here. It says " + element.innerHTML;
@@ -272,7 +318,7 @@ HANDLERS = {
         }
     },
     "text-area": function textAreaHandler(element) {
-        return "There is a field here to enter text.";
+        return "There is a field here to enter text."; // TODO make interactive
     }
 
 
@@ -282,10 +328,15 @@ const ROLES = {
     "div": "text-only",
     "p": "text-only",
     "li": "text-only",
-    "ul": "invisible",
-    "ol": "text-only", // want to add more information here?
+    // "ul": "invisible",
     "option": "text-only",
     "figure": "text-only",
+    "h1": "text-only",
+    "h2": "text-only",
+    "h3": "text-only",
+    "h4": "text-only",
+    "h5": "text-only",
+    "h6": "text-only",
 
     "aside": "text-with-tag",
     "header": "text-with-tag",
@@ -305,6 +356,9 @@ const ROLES = {
     "canvas": "canvas",
     "svg": "canvas",
 
+    "ul": "unordered-list",
+    "ol": "ordered-list", // want to add more information here?
+
     "image": "image",
     "a": "link",
     "nav": "nav",
@@ -322,9 +376,8 @@ const ROLES = {
     "fieldset": "fieldset",
     "form": "form",
     "select": "select",
-    "progress": "progress"
+    "progress": "progress",
+    "textarea": "text-area"
 
-
-    // "ul": "unordered-list"
     //TODO the rest of the elements, and make sure this works
 }
