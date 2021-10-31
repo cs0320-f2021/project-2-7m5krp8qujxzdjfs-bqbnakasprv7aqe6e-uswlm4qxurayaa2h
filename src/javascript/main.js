@@ -9,7 +9,7 @@ let VOICE_SYNTH = window.speechSynthesis
 
 // global for current index
 // NOTE: will need to update based on elements (controls) we insert into the page
-let MIN_INDEX = 12
+let MIN_INDEX = 11
 let CURRENT_INDEX = MIN_INDEX
 let SHOULD_READ = false
 
@@ -116,7 +116,7 @@ window.onload = () => {
                 // in case we had just been stopped
                 unhighlightElement(CURRENT_ELEMENT.value)
 
-                // get the element before the one that's currently being read out
+                // get the element before the one that's just been read out
                 CURRENT_INDEX = PAGE_MAP[CURRENT_ELEMENT.value.id] - 1
                 console.log(CURRENT_INDEX)
 
@@ -153,9 +153,8 @@ window.onload = () => {
                 // in case we had just been stopped
                 unhighlightElement(CURRENT_ELEMENT.value)
 
-                // get the element before the one that's currently being read out
+                // get the element after the one that's just been read out
                 CURRENT_INDEX = PAGE_MAP[CURRENT_ELEMENT.value.id] + 1
-                console.log(CURRENT_INDEX)
 
                 // make sure user can't go past length of ALL_ELEMENTS
                 if (CURRENT_INDEX >= ALL_ELEMENTS.length) {
@@ -174,7 +173,7 @@ window.onload = () => {
                         break;
                     }
                 }
-
+                console.log(CURRENT_INDEX)
                 await CURRENT_ELEMENT.setAndSpeak(newElement)
                 // unhighlightElement(newElement)
                 break;
@@ -251,11 +250,12 @@ let HANDLERS;
 HANDLERS = {
     "text-only": function textOnlyHandler(element) {
         console.log("text-only")
-        console.log(element)
         console.log(element.innerHTML)
         return element.innerHTML;
     },
     "text-with-tag": function textWithTagHandler(element) {
+        console.log("text-with-tag")
+        console.log(element.innerHTML)
         if (element === "aside") {
             return "Now reading an " + element.tagName + " . " + element.innerHTML;
         } else {
@@ -263,6 +263,7 @@ HANDLERS = {
         }
     },
     "invisible": function invisibleHandler(element) {
+        console.log("invisible")
         return "";
     },
     "link": function linkHandler(element) {
@@ -279,6 +280,7 @@ HANDLERS = {
 
     },
     "button": function buttonHandler(element) {
+        console.log("button handled")
         document.getElementById("stop-reading").click()
         return "This is a button that says " + element.innerHTML + " Press enter to click the button," +
             " or press space to continue reading.";
@@ -298,12 +300,13 @@ HANDLERS = {
     },
     // TODO enumerate different types (e.g. color, datetime-local)/enrich?
     "input": function inputHandler(element) {
+        console.log("input handled")
         document.getElementById("stop-reading").click()
-        return "There is an interactive " + element.type + " element here." + " Press enter to type in " +
-            " the text box, or press space to continue reading.";
+        return "There is an interactive " + element.type + " element here." + " Press enter to interact, " +
+            "or press space to continue reading.";
     },
     "canvas": function canvasHandler(element) {
-        if (!(element.innerHTML.trim === "")) {
+        if (!(element.innerHTML.trim() === "")) {
             return "There is a graphic here displaying: " + element.innerHTML;
         } else {
             return "There is a graphic here."
@@ -343,15 +346,19 @@ HANDLERS = {
     "audio": function audioHandler(element) {
         return "There is an audio file." // + element.src;
     },
+
     "fieldset": function fieldSetHandler(element) {
         return "There is a grouping of elements here." // TODO handle legend, etc.?
     },
+
     "form": function formHandler(element) {
         return "There is a field to submit information." // TODO clean up
     },
+
     "select": function selectHandler(element) {
         return "There is a dropdown menu.";
     },
+
     "progress": function progressBarHandler(element) {
         if (element.max && element.value) {
             return "There is a graphic here displaying progress of "
@@ -363,18 +370,20 @@ HANDLERS = {
             return "There is a progress bar here."; // TODO clean up
         }
     },
+
     "text-area": function textAreaHandler(element) {
-        return "There is a field here to enter text."; // TODO make interactive
+        console.log("text-area handled")
+        document.getElementById("stop-reading").click()
+        return "There is a field here to enter text. Press enter to type in the text box, " +
+            "or press space to continue reading."
     }
-
-
 };
+
 // maps element tag names to element categories
 const ROLES = {
     "div": "text-only",
     "p": "text-only",
     "li": "text-only",
-    // "ul": "invisible",
     "option": "text-only",
     "figure": "text-only",
     "h1": "text-only",
@@ -394,7 +403,6 @@ const ROLES = {
     "main": "invisible",
     "section": "invisible",
     "cite": "invisible",
-    // "figure": "invisible",
 
     "figcaption": "caption",
     "caption": "caption",
@@ -405,7 +413,7 @@ const ROLES = {
     "ul": "unordered-list",
     "ol": "ordered-list", // want to add more information here?
 
-    "image": "image",
+    "img": "image",
     "a": "link",
     "nav": "nav",
     "button": "button",
@@ -424,6 +432,4 @@ const ROLES = {
     "select": "select",
     "progress": "progress",
     "textarea": "text-area"
-
-    //TODO the rest of the elements, and make sure this works
 }
