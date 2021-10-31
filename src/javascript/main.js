@@ -68,21 +68,13 @@ window.onload = () => {
                     break
                 }
             }
-            // return new Promise(() => {
-            //     console.log("promise")
-            //     return CURRENT_INDEX === ALL_ELEMENTS.length - 1
-            // })
         }
         READING_LOOP()
-        // READING_LOOP().then(() => {
-        //     console.log("Loop restarting")
-        //     CURRENT_INDEX = 3
-        // })
-        //
     })
 
     document.getElementById("stop-reading").addEventListener("click", () => {
         console.log("stop")
+        VOICE_SYNTH.cancel();
         SHOULD_READ = false
     })
 
@@ -91,34 +83,50 @@ window.onload = () => {
         // potentially leave highlighting until restarting
         switch (event.key) {
             case "ArrowLeft" :
-                // TODO: Make sure user can't get to -1
+                // cancel the voice and prevent default
                 event.preventDefault()
                 VOICE_SYNTH.cancel();
                 console.log("Going back")
                 SHOULD_READ = false
+
+                // get the element before the one that's currently being read out
                 CURRENT_INDEX = PAGE_MAP[CURRENT_ELEMENT.value.id] - 1
                 console.log(CURRENT_INDEX)
+
+                // make sure that the user can't get to our buttons
+                if (CURRENT_INDEX < 3) {
+                    CURRENT_INDEX = 3;
+                }
+
+                // speak and then unhighlight this element
                 newElement = ALL_ELEMENTS[CURRENT_INDEX]
                 await CURRENT_ELEMENT.setAndSpeak(newElement)
                 newElement.style['background-color'] = ""
                 newElement.style['text-decoration'] = ""
                 newElement.style['color'] = ""
-                // SHOULD_READ = true
                 break;
             case "ArrowRight" :
-                // TODO: Make sure user can't go past length of ALL_ELEMENTS
+                // cancel the voice and prevent default
                 event.preventDefault()
                 VOICE_SYNTH.cancel()
                 console.log("Going forward")
                 SHOULD_READ = false
+
+                // get the element before the one that's currently being read out
                 CURRENT_INDEX = PAGE_MAP[CURRENT_ELEMENT.value.id] + 1
                 console.log(CURRENT_INDEX)
+
+                // make sure user can't go past length of ALL_ELEMENTS
+                if (CURRENT_INDEX >= ALL_ELEMENTS.length) {
+                    CURRENT_INDEX = ALL_ELEMENTS.length - 1
+                }
+
+                // speak and then unhighlight this element
                 newElement = ALL_ELEMENTS[CURRENT_INDEX]
                 await CURRENT_ELEMENT.setAndSpeak(newElement)
                 newElement.style['background-color'] = ""
                 newElement.style['text-decoration'] = ""
                 newElement.style['color'] = ""
-                // SHOULD_READ = true
                 break;
         }
     })
@@ -251,7 +259,22 @@ HANDLERS = {
     },
     "select": function selectHandler(element) {
         return "There is a dropdown menu.";
+    },
+    "progress": function progressBarHandler(element) {
+        if (element.max && element.value) {
+            return "There is a graphic here displaying progress of "
+                + element.value + " out of " + element.max;
+        } else if (element.value) {
+            return "There is a graphic here displaying progress of "
+                + element.value + " out of 1.";
+        } else {
+            return "There is a progress bar here."; // TODO clean up
+        }
+    },
+    "text-area": function textAreaHandler(element) {
+        return "There is a field here to enter text.";
     }
+
 
 };
 // maps element tag names to element categories
@@ -259,7 +282,7 @@ const ROLES = {
     "div": "text-only",
     "p": "text-only",
     "li": "text-only",
-    "ul": "text-only",
+    "ul": "invisible",
     "ol": "text-only", // want to add more information here?
     "option": "text-only",
     "figure": "text-only",
@@ -298,7 +321,8 @@ const ROLES = {
 
     "fieldset": "fieldset",
     "form": "form",
-    "select": "select"
+    "select": "select",
+    "progress": "progress"
 
 
     // "ul": "unordered-list"
