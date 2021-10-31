@@ -229,6 +229,7 @@ const injectHtml = () => {
     sr.style.position = "sticky"
     sr.style.top = '0'
     sr.style.right = '0'
+    sr.style.zIndex = '999'
     // Add buttons to start/stop reading
     sr.innerHTML = `<button id="start-reading" style="margin-bottom:4px; margin-top:4px">Start Reading</button>`
     sr.innerHTML += `\n<button id="stop-reading">Stop Reading</button>`
