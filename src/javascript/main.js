@@ -7,13 +7,18 @@ let PAGE_MAP = {}
 // shortcut to access speech synthesizer
 let VOICE_SYNTH = window.speechSynthesis
 
-// global for current index
+// global for index of first element on page (following controls)
 // NOTE: will need to update based on elements (controls) we insert into the page
 let MIN_INDEX = 12
+
+// global for current index
 let CURRENT_INDEX = MIN_INDEX
+
 let SHOULD_READ = false
 
-let HIGHLIGHT_COLOR = "yellow"
+// global for highlight color
+// default yellow
+let HIGHLIGHT_COLOR = "#fff280"
 
 function highlightElement(e) {
     e.style['background-color'] = HIGHLIGHT_COLOR
@@ -28,7 +33,6 @@ function unhighlightElement(e) {
 }
 
 let CURRENT_ELEMENT = {
-    // TODO add highlight color parameter
     setAndSpeak: async function (newElement) {
         this.value = newElement
         if (newElement.style.hidden !== true && newElement.style.visibility !== "none") {
@@ -64,8 +68,6 @@ window.onload = () => {
     // Set the highlight color for the page
     let select = document.getElementById("highlight-color");
     select.onchange = () => { HIGHLIGHT_COLOR = select.value }
-
-
 
     document.getElementById("start-reading").addEventListener("click", () => {
         console.log("start")
@@ -220,7 +222,6 @@ const mapPage = () => {
 }
 
 const injectHtml = () => {
-    // TODO: make sticky!
     //document.body.innerHTML += `<div id="sr" style="position: sticky; top: 0px; right: 0px;"> Screenreader </div>`
     const sr = document.createElement("div")
     sr.style.float = 'right'
@@ -233,11 +234,11 @@ const injectHtml = () => {
     sr.innerHTML += `\n<button id="stop-reading">Stop Reading</button>`
     // Add drop-down to select highlight color
     sr.innerHTML += `<br>Highlight Color: <select name="highlight-color" id="highlight-color">
-        <option value="yellow">Yellow</option>
-        <option value="orange">Orange</option>
-        <option value="#829e6f">Green</option>
-        <option value="#98bbed">Blue</option>
-        <option value="#9e6f9e">Purple</option>
+        <option value="#fff280">Yellow</option>
+        <option value="#ffd29e">Orange</option>
+        <option value="#c8ff70">Green</option>
+        <option value="#9efff9">Cyan</option>
+        <option value="#e6c7ff">Purple</option>
         <option value="">None</option>
     </select>`
     document.body.insertBefore(sr, document.body.firstChild)
@@ -246,7 +247,7 @@ const injectHtml = () => {
 
 // maps element categories to reading handlers (return strings)
 // TODO: Read out title??
-//TODO dealing with color?
+// TODO dealing with color?
 let HANDLERS;
 HANDLERS = {
     "text-only": function textOnlyHandler(element) {
@@ -374,7 +375,6 @@ const ROLES = {
     "div": "text-only",
     "p": "text-only",
     "li": "text-only",
-    // "ul": "invisible",
     "option": "text-only",
     "figure": "text-only",
     "h1": "text-only",
@@ -395,6 +395,7 @@ const ROLES = {
     "section": "invisible",
     "cite": "invisible",
     // "figure": "invisible",
+    "time": "invisible",
 
     "figcaption": "caption",
     "caption": "caption",
