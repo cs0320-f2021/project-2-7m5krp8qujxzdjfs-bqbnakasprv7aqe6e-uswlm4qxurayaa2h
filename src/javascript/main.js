@@ -407,7 +407,7 @@ const ROLES = {
     "ul": "unordered-list",
     "ol": "ordered-list", // want to add more information here?
 
-    "image": "image",
+    "img": "image",
     "a": "link",
     "nav": "nav",
     "button": "button",
