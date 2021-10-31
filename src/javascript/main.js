@@ -9,7 +9,7 @@ let VOICE_SYNTH = window.speechSynthesis
 
 // global for index of first element on page (following controls)
 // NOTE: will need to update based on elements (controls) we insert into the page
-let MIN_INDEX = 12
+let MIN_INDEX = 11
 
 // global for current index
 let CURRENT_INDEX = MIN_INDEX
