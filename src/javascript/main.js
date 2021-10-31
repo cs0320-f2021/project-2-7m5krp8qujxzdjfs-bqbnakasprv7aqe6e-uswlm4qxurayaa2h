@@ -223,14 +223,14 @@ const injectHtml = () => {
     // TODO: make sticky!
     //document.body.innerHTML += `<div id="sr" style="position: sticky; top: 0px; right: 0px;"> Screenreader </div>`
     const sr = document.createElement("div")
-    //sr.style.float = 'right'
+    sr.style.float = 'right'
     sr.id = 'sr'
-    sr.style.position = "absolute"
+    sr.style.position = "sticky"
     sr.style.top = '0'
     sr.style.right = '0'
     // Add buttons to start/stop reading
-    sr.innerHTML = `<button id="start-reading">Start Reading</button>`
-    sr.innerHTML += `<button id="stop-reading">Stop Reading</button>`
+    sr.innerHTML = `<button id="start-reading" style="margin-bottom:4px; margin-top:4px">Start Reading</button>`
+    sr.innerHTML += `\n<button id="stop-reading">Stop Reading</button>`
     // Add drop-down to select highlight color
     sr.innerHTML += `<br>Highlight Color: <select name="highlight-color" id="highlight-color">
         <option value="yellow">Yellow</option>
