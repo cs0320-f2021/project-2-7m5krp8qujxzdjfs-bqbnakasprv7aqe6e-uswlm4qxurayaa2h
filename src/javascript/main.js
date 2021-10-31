@@ -58,7 +58,7 @@ window.onload = () => {
         return SHOULD_READ
     }
 
-    document.getElementById("read-page").addEventListener("click", () => {
+    document.getElementById("start-reading").addEventListener("click", () => {
         console.log("start")
         // if (!SHOULD_READ) -- idea to handle multiple "read page" clicks (potentially return to later) -- messes up checkReading
         SHOULD_READ = true
@@ -85,12 +85,14 @@ window.onload = () => {
         READING_LOOP()
     })
 
+    // event listener for clicking the stop reading button
     document.getElementById("stop-reading").addEventListener("click", () => {
         console.log("stop")
         VOICE_SYNTH.cancel();
         SHOULD_READ = false
     })
 
+    // event listeners for arrow key presses and interacting using space
     window.addEventListener("keydown", async (event) => {
         let newElement;
         // potentially leave highlighting until restarting
@@ -118,7 +120,6 @@ window.onload = () => {
                 newElement = ALL_ELEMENTS[CURRENT_INDEX]
 
                 // skip over invisible elements
-                // TODO make cleaner
                 while (ROLES[newElement.tagName.toLowerCase()] === "invisible") {
                     CURRENT_INDEX -= 1
 
@@ -168,6 +169,24 @@ window.onload = () => {
                 await CURRENT_ELEMENT.setAndSpeak(newElement)
                 // unhighlightElement(newElement)
                 break;
+            case "Enter" : {
+                event.preventDefault()
+                let e = CURRENT_ELEMENT.value
+                if (e.tagName.toLowerCase() === "input") {
+                    e.focus()
+                } else {
+                    // else, it will be a button or a link
+                    e.click()
+                }
+                break;
+            }
+            case " " : {
+                if (SHOULD_READ === false) {
+                    document.getElementById("start-reading").click()
+                } else {
+                    document.getElementById("stop-reading").click()
+                }
+            }
         }
     })
 }
@@ -199,7 +218,7 @@ const injectHtml = () => {
     sr.style.position = "absolute"
     sr.style.top = '0'
     sr.style.right = '0'
-    sr.innerHTML = `<button id="read-page">Read Page</button> <button id="stop-reading">Stop Reading</button>`
+    sr.innerHTML = `<button id="start-reading">Start Reading</button> <button id="stop-reading">Stop Reading</button>`
     document.body.insertBefore(sr, document.body.firstChild)
 }
 
@@ -228,16 +247,20 @@ HANDLERS = {
     "link": function linkHandler(element) {
         console.log("link handled")
         console.log(element.href)
+        document.getElementById("stop-reading").click()
         if (element.innerHTML !== element.href) {
             //TODO just reading part of the link out
-            return "Link: " + element.innerHTML + " This link goes to: " + element.href;
+            return "Link: " + element.innerHTML + " This link goes to: " + element.href + " Press enter to click" +
+                " the link, or press space to continue reading.";
         } else {
-            return "Link to: " + element.href;
+            return "Link to: " + element.href + " Press enter to click the link, or press space to continue reading.";
         }
 
     },
     "button": function buttonHandler(element) {
-        return "This is a button that says " + element.innerHTML;
+        document.getElementById("stop-reading").click()
+        return "This is a button that says " + element.innerHTML + " Press enter to click the button," +
+            " or press space to continue reading.";
     },
     "nav": function navHandler(element) {
         return "This is a navigation pane.";
@@ -254,7 +277,9 @@ HANDLERS = {
     },
     // TODO enumerate different types (e.g. color, datetime-local)/enrich?
     "input": function inputHandler(element) {
-        return "There is an interactive " + element.type + " element here.";
+        document.getElementById("stop-reading").click()
+        return "There is an interactive " + element.type + " element here." + " Press enter to type in " +
+            " the text box, or press space to continue reading.";
     },
     "canvas": function canvasHandler(element) {
         if (!(element.innerHTML.trim === "")) {
