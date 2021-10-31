@@ -236,6 +236,21 @@ HANDLERS = {
     },
     "td": function tableDataHandler(element) {
         return "The data in this cell says " + element.innerHTML;
+    },
+    "tfoot": function tableFooterHandler(element) {
+        return "This is a table footer. It contains " + element.innerHTML; // fix me
+    },
+    "audio": function audioHandler(element) {
+        return "There is an audio file." // + element.src;
+    },
+    "fieldset": function fieldSetHandler(element) {
+        return "There is a grouping of elements here." // TODO handle legend, etc.?
+    },
+    "form": function formHandler(element) {
+        return "There is a field to submit information." // TODO clean up
+    },
+    "select": function selectHandler(element) {
+        return "There is a dropdown menu.";
     }
 
 };
@@ -246,6 +261,8 @@ const ROLES = {
     "li": "text-only",
     "ul": "text-only",
     "ol": "text-only", // want to add more information here?
+    "option": "text-only",
+    "figure": "text-only",
 
     "aside": "text-with-tag",
     "header": "text-with-tag",
@@ -257,7 +274,7 @@ const ROLES = {
     "main": "invisible",
     "section": "invisible",
     "cite": "invisible",
-    "figure": "invisible",
+    // "figure": "invisible",
 
     "figcaption": "caption",
     "caption": "caption",
@@ -271,12 +288,17 @@ const ROLES = {
     "button": "button",
     "input": "input",
     "label": "label",
+    "audio": "audio",
 
     "table": "table",
     "th": "th",
     "td": "td",
-    "tfoot": "tfoot"
+    "tfoot": "tfoot",
+    "tr": "invisible", // handle me?
 
+    "fieldset": "fieldset",
+    "form": "form",
+    "select": "select"
 
 
     // "ul": "unordered-list"
