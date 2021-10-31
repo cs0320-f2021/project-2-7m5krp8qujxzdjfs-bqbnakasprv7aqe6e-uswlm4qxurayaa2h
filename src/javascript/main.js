@@ -377,7 +377,6 @@ const ROLES = {
     "p": "text-only",
     "li": "text-only",
     "option": "text-only",
-    "figure": "text-only",
     "h1": "text-only",
     "h2": "text-only",
     "h3": "text-only",
@@ -395,7 +394,7 @@ const ROLES = {
     "main": "invisible",
     "section": "invisible",
     "cite": "invisible",
-    // "figure": "invisible",
+    "figure": "invisible",
     "time": "invisible",
 
     "figcaption": "caption",
