@@ -9,11 +9,14 @@ let VOICE_SYNTH = window.speechSynthesis
 
 // global for current index
 // NOTE: will need to update based on elements (controls) we insert into the page
-let CURRENT_INDEX = 3
+let MIN_INDEX = 12
+let CURRENT_INDEX = MIN_INDEX
 let SHOULD_READ = false
 
+let HIGHLIGHT_COLOR = "yellow"
+
 function highlightElement(e) {
-    e.style['background-color'] = "yellow"
+    e.style['background-color'] = HIGHLIGHT_COLOR
     e.style['text-decoration'] = "underline"
     e.style['color'] = "black"
 }
@@ -58,13 +61,19 @@ window.onload = () => {
         return SHOULD_READ
     }
 
+    // Set the highlight color for the page
+    let select = document.getElementById("highlight-color");
+    select.onchange = () => { HIGHLIGHT_COLOR = select.value }
+
+
+
     document.getElementById("start-reading").addEventListener("click", () => {
         console.log("start")
         // if (!SHOULD_READ) -- idea to handle multiple "read page" clicks (potentially return to later) -- messes up checkReading
         SHOULD_READ = true
         // restart reading page if at the end
         if (CURRENT_INDEX === ALL_ELEMENTS.length - 1) {
-            CURRENT_INDEX = 3
+            CURRENT_INDEX = MIN_INDEX
         }
         let READING_LOOP = async function () {
             console.log(ALL_ELEMENTS.length)
@@ -112,8 +121,8 @@ window.onload = () => {
                 console.log(CURRENT_INDEX)
 
                 // make sure that the user can't get to our buttons
-                if (CURRENT_INDEX < 3) {
-                    CURRENT_INDEX = 3;
+                if (CURRENT_INDEX < MIN_INDEX) {
+                    CURRENT_INDEX = MIN_INDEX;
                 }
 
                 // speak and then unhighlight this element
@@ -123,8 +132,8 @@ window.onload = () => {
                 while (ROLES[newElement.tagName.toLowerCase()] === "invisible") {
                     CURRENT_INDEX -= 1
 
-                    if (CURRENT_INDEX < 3) {
-                        CURRENT_INDEX = 3
+                    if (CURRENT_INDEX < MIN_INDEX) {
+                        CURRENT_INDEX = MIN_INDEX
                         newElement = ALL_ELEMENTS[CURRENT_INDEX]
                         break;
                     }
@@ -181,6 +190,7 @@ window.onload = () => {
                 break;
             }
             case " " : {
+                event.preventDefault()
                 if (SHOULD_READ === false) {
                     document.getElementById("start-reading").click()
                 } else {
@@ -205,7 +215,7 @@ const mapPage = () => {
     }
 
     // initialize CURRENT_ELEMENT to be the first thing in the page
-    CURRENT_ELEMENT.value = ALL_ELEMENTS[3]
+    CURRENT_ELEMENT.value = ALL_ELEMENTS[MIN_INDEX]
 
 }
 
@@ -218,7 +228,18 @@ const injectHtml = () => {
     sr.style.position = "absolute"
     sr.style.top = '0'
     sr.style.right = '0'
-    sr.innerHTML = `<button id="start-reading">Start Reading</button> <button id="stop-reading">Stop Reading</button>`
+    // Add buttons to start/stop reading
+    sr.innerHTML = `<button id="start-reading">Start Reading</button>`
+    sr.innerHTML += `<button id="stop-reading">Stop Reading</button>`
+    // Add drop-down to select highlight color
+    sr.innerHTML += `<br>Highlight Color: <select name="highlight-color" id="highlight-color">
+        <option value="yellow">Yellow</option>
+        <option value="orange">Orange</option>
+        <option value="#829e6f">Green</option>
+        <option value="#98bbed">Blue</option>
+        <option value="#9e6f9e">Purple</option>
+        <option value="">None</option>
+    </select>`
     document.body.insertBefore(sr, document.body.firstChild)
 }
 
