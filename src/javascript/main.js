@@ -141,8 +141,11 @@ const injectHtml = () => {
     // TODO: make sticky!
     //document.body.innerHTML += `<div id="sr" style="position: sticky; top: 0px; right: 0px;"> Screenreader </div>`
     const sr = document.createElement("div")
-    sr.style.float = 'right'
+    //sr.style.float = 'right'
     sr.id = 'sr'
+    sr.style.position = "absolute"
+    sr.style.top = '0'
+    sr.style.right = '0'
     sr.innerHTML = `<button id="read-page">Read Page</button> <button id="stop-reading">Stop Reading</button>`
     document.body.insertBefore(sr, document.body.firstChild)
 }
