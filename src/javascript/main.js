@@ -91,6 +91,7 @@ window.onload = () => {
         // potentially leave highlighting until restarting
         switch (event.key) {
             case "ArrowLeft" :
+                // TODO: Make sure user can't get to -1
                 event.preventDefault()
                 VOICE_SYNTH.cancel();
                 console.log("Going back")
@@ -105,6 +106,7 @@ window.onload = () => {
                 // SHOULD_READ = true
                 break;
             case "ArrowRight" :
+                // TODO: Make sure user can't go past length of ALL_ELEMENTS
                 event.preventDefault()
                 VOICE_SYNTH.cancel()
                 console.log("Going forward")
