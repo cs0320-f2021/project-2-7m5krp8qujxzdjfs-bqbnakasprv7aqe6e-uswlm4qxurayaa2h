@@ -7,6 +7,10 @@ let PAGE_MAP = {}
 // shortcut to access speech synthesizer
 let VOICE_SYNTH = window.speechSynthesis
 
+let VOICES = []
+
+let VOICE
+
 // global for index of first element on page (following controls)
 // NOTE: will need to update based on elements (controls) we insert into the page
 let MIN_INDEX = 11
@@ -42,8 +46,14 @@ let CURRENT_ELEMENT = {
             let speakString = handler(newElement)
             if (speakString !== "") {
                 highlightElement(newElement)
-                let audio = new SpeechSynthesisUtterance(speakString)
-                VOICE_SYNTH.speak(audio)
+                let utterance = new SpeechSynthesisUtterance(speakString)
+                console.log(utterance.voice)
+                console.log(VOICE.name)
+                utterance.voice = VOICE
+                // if (VOICE) {
+                //
+                // }
+                VOICE_SYNTH.speak(utterance)
                 return new Promise(resolve => {
                     audio.onend = resolve
                 })
