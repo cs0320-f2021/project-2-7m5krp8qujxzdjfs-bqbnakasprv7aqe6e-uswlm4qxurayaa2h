@@ -232,6 +232,34 @@ const mapPage = () => {
 }
 
 const injectHtml = () => {
+    function populateVoiceList() {
+        VOICES = VOICE_SYNTH.getVoices();
+
+        // for (let i = 0; i < VOICES.length ; i++) {
+        //     let option = document.createElement('option');
+        //     option.textContent = VOICES[i].name + ' (' + VOICES[i].lang + ')';
+        //
+        //     if(VOICES[i].default) {
+        //         option.textContent += ' -- DEFAULT';
+        //     }
+        //
+        //     option.setAttribute('data-lang', VOICES[i].lang);
+        //     option.setAttribute('data-name', VOICES[i].name);
+        //     voiceSelect.appendChild(option);
+        // }
+    }
+
+    populateVoiceList();
+
+    console.log(VOICES)
+
+    // if (speechSynthesis.onvoiceschanged !== undefined) {
+    //     speechSynthesis.onvoiceschanged = populateVoiceList;
+    // }
+
+    if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
     //document.body.innerHTML += `<div id="sr" style="position: sticky; top: 0px; right: 0px;"> Screenreader </div>`
     const sr = document.createElement("div")
     sr.style.float = 'right'
@@ -244,7 +272,8 @@ const injectHtml = () => {
     sr.innerHTML = `<button id="start-reading" style="margin-bottom:4px; margin-top:4px">Start Reading</button>`
     sr.innerHTML += `\n<button id="stop-reading">Stop Reading</button>`
     // Add drop-down to select highlight color
-    sr.innerHTML += `<br>Highlight Color: <select name="highlight-color" id="highlight-color">
+    sr.innerHTML += `<br>Highlight Color: <select name="highlight-color" id="highlight-color" style="margin-bottom:4px">
+    
         <option value="#fff280">Yellow</option>
         <option value="#ffd29e">Orange</option>
         <option value="#c8ff70">Green</option>
@@ -252,6 +281,22 @@ const injectHtml = () => {
         <option value="#e6c7ff">Purple</option>
         <option value="">None</option>
     </select>`
+    sr.innerHTML += `<br> Voice: <select name="voice" id="voice"></select>`
+    for (let voice of VOICES) {
+        console.log(voice)
+        // console.log(sr.getElementsByTagName('select'))
+
+        if (voice.default) {
+            console.log("default")
+            console.log(voice)
+            VOICE = voice
+        }
+        sr.getElementsByTagName('select')[1].innerHTML += `<option value=${voice}>${voice.name + ", " + voice.lang}</option>`
+    }
+
+    MIN_INDEX = MIN_INDEX + VOICES.length + 2
+    CURRENT_INDEX = MIN_INDEX
+    
     document.body.insertBefore(sr, document.body.firstChild)
 }
 
