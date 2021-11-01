@@ -50,12 +50,13 @@ let CURRENT_ELEMENT = {
                 console.log(utterance.voice)
                 console.log(VOICE.name)
                 utterance.voice = VOICE
+                console.log(utterance.voice)
                 // if (VOICE) {
                 //
                 // }
                 VOICE_SYNTH.speak(utterance)
                 return new Promise(resolve => {
-                    audio.onend = resolve
+                    utterance.onend = resolve
                 })
             }
         }
@@ -75,6 +76,15 @@ window.onload = () => {
         return SHOULD_READ
     }
 
+    // Set the voice preferences for the page
+    let voiceSelect = document.getElementById("voice");
+    console.log("voice select")
+    console.log(voiceSelect)
+    console.log(VOICE_SYNTH.voice)
+    // console.log(VOICE_SYNTH.voice)
+    console.log(voiceSelect.value)
+    voiceSelect.onchange = () => { VOICE = voiceSelect.value }
+    
     // Set the highlight color for the page
     let select = document.getElementById("highlight-color");
     select.onchange = () => { HIGHLIGHT_COLOR = select.value }
