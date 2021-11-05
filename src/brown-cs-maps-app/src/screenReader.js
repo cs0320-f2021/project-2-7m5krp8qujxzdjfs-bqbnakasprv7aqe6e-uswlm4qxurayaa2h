@@ -7,15 +7,6 @@ let PAGE_MAP = {}
 // shortcut to access speech synthesizer
 let VOICE_SYNTH = window.speechSynthesis
 
-// array containing all voices
-let VOICES = []
-
-// global for voice
-let VOICE
-
-// map
-let VOICE_MAP = {}
-
 // global for index of first element on page (following controls)
 // NOTE: will need to update based on elements (controls) we insert into the page
 let MIN_INDEX = 11
@@ -51,17 +42,10 @@ let CURRENT_ELEMENT = {
             let speakString = handler(newElement)
             if (speakString !== "") {
                 highlightElement(newElement)
-                let utterance = new SpeechSynthesisUtterance(speakString)
-                console.log("utterance.voice #1")
-                console.log(utterance.voice)
-                console.log("VOICE")
-                console.log(VOICE)
-                utterance.voice = VOICE
-                console.log("utterance.voice #2")
-                console.log(utterance.voice)
-                VOICE_SYNTH.speak(utterance)
+                let audio = new SpeechSynthesisUtterance(speakString)
+                VOICE_SYNTH.speak(audio)
                 return new Promise(resolve => {
-                    utterance.onend = resolve
+                    audio.onend = resolve
                 })
             }
         }
@@ -79,10 +63,6 @@ const screenReader = () => {
     let checkReading = async function () {
         return SHOULD_READ
     }
-
-    // Set the voice preferences for the page
-    let voiceSelect = document.getElementById("voice");
-    voiceSelect.onchange = () => { VOICE = VOICE_MAP[voiceSelect.value] }
 
     // Set the highlight color for the page
     let select = document.getElementById("highlight-color");
@@ -243,17 +223,6 @@ const mapPage = () => {
 }
 
 const injectHtml = () => {
-    function populateVoiceList() {
-        VOICES = VOICE_SYNTH.getVoices();
-    }
-    populateVoiceList();
-
-    console.log("voices")
-    console.log(VOICES)
-
-    if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = populateVoiceList;
-    }
     //document.body.innerHTML += `<div id="sr" style="position: sticky; top: 0px; right: 0px;"> Screenreader </div>`
     const sr = document.createElement("div")
     sr.style.float = 'right'
@@ -266,8 +235,7 @@ const injectHtml = () => {
     sr.innerHTML = `<button id="start-reading" style="margin-bottom:4px; margin-top:4px">Start Reading</button>`
     sr.innerHTML += `\n<button id="stop-reading">Stop Reading</button>`
     // Add drop-down to select highlight color
-    sr.innerHTML += `<br>Highlight Color: <select name="highlight-color" id="highlight-color" style="margin-bottom:4px">
-    
+    sr.innerHTML += `<br>Highlight Color: <select name="highlight-color" id="highlight-color">
         <option value="#fff280">Yellow</option>
         <option value="#ffd29e">Orange</option>
         <option value="#c8ff70">Green</option>
@@ -275,33 +243,9 @@ const injectHtml = () => {
         <option value="#e6c7ff">Purple</option>
         <option value="">None</option>
     </select>`
-    sr.innerHTML += `<br> Voice: <select name="voice" id="voice"></select>`
-    for (let i = 0; i < VOICES.length; i++) {
-        // console.log(voice)
-        // console.log(sr.getElementsByTagName('select'))
-        let voice = VOICES[i]
-        console.log(voice)
-
-        if (voice.default) {
-            console.log("default")
-            console.log(voice)
-            VOICE = voice
-        }
-
-        VOICE_MAP[i] = voice
-
-        sr.getElementsByTagName('select')[1].innerHTML +=
-            `<option value=${i}>${voice.name + ", " + voice.lang}</option>`
-    }
-
-    console.log("vm3")
-    console.log(VOICE_MAP[3])
-
-    MIN_INDEX = MIN_INDEX + VOICES.length + 2
-    CURRENT_INDEX = MIN_INDEX
-    
     document.body.insertBefore(sr, document.body.firstChild)
 }
+
 
 // maps element categories to reading handlers (return strings)
 // TODO: Read out title??
