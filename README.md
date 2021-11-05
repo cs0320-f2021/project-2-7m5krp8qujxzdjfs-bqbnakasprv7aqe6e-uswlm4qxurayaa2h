@@ -20,7 +20,7 @@ To start the server use:
 ***
 ## Specifications
 **1. How to use and run the screen reader?**
-- Developers need to add `main.js` as a script in the head of their HTML document.
+- Developers need to add `screenReader.js` as a script in the head of their HTML document.
 Users can:
 - Users can then click the `Start Reading` button to have the screen reader read
 the page from top to bottom.
