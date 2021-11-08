@@ -1,19 +1,19 @@
-package edu.brown.cs.cs32friends.handlers.maps;
+package edu.brown.cs.student.handlers.maps;
 
 import java.util.List;
 
-import edu.brown.cs.cs32friends.graph.Graph;
-import edu.brown.cs.cs32friends.graph.GraphSourceParser;
-import edu.brown.cs.cs32friends.graph.ValuedEdge;
-import edu.brown.cs.cs32friends.graph.search.AStar;
-import edu.brown.cs.cs32friends.graph.search.GraphSearch;
-import edu.brown.cs.cs32friends.graph.search.heuristic.HaversineHeuristic;
-import edu.brown.cs.cs32friends.main.CommandHandler;
-import edu.brown.cs.cs32friends.main.ParseCommands;
-import edu.brown.cs.cs32friends.maps.MapNode;
-import edu.brown.cs.cs32friends.maps.MapsDatabase;
-import edu.brown.cs.cs32friends.maps.NearestMap;
-import edu.brown.cs.cs32friends.maps.Way;
+import edu.brown.cs.student.graph.Graph;
+import edu.brown.cs.student.graph.GraphSourceParser;
+import edu.brown.cs.student.graph.ValuedEdge;
+import edu.brown.cs.student.graph.search.AStar;
+import edu.brown.cs.student.graph.search.GraphSearch;
+import edu.brown.cs.student.graph.search.heuristic.HaversineHeuristic;
+import edu.brown.cs.student.main.CommandHandler;
+import edu.brown.cs.student.main.ParseCommands;
+import edu.brown.cs.student.maps.MapNode;
+import edu.brown.cs.student.maps.MapsDatabase;
+import edu.brown.cs.student.maps.NearestMap;
+import edu.brown.cs.student.maps.Way;
 
 /**
  * RouteHandler class to provide output for the route command.

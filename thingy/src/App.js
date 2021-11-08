@@ -1,28 +1,49 @@
+import logo from './logo.svg';
 import './App.css';
-import screenReader from "./screenReader.js"
-import {useEffect} from "react";
-import Maps from "./Maps.js"
+import Route from './Route.js';
+import {useState} from "react";
+import {AwesomeButton} from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
+
 
 function App() {
-    useEffect(() => {
-        screenReader()
-    }, [])
+    function TextBox(props) {
+        return <input type="text"
+                      label={props.label}
+                      value={props.value}
+                      onChange={(input) => props.setter(input.target.value)}>
+        </input>
+    }
 
-    //TODO write a function that selects from sql database ways within a range
-    /* sql pseudocode
-    SELECT * FROM way
-        join node ON node.id==way.start
-        join node ON node.id==way.stop //TODO look up this kinda double join
-    WHERE
-        ...
+    function DisplayDebug(props) {
+        return <header>{props.d}</header>
+    }
 
-     */
+    const [startLat, setStartLat] = useState(0);
+    const [startLon, setStartLon] = useState(0);
+    const [endLat, setEndLat] = useState(0);
+    const [endLon, setEndLon] = useState(0);
 
+    const [routeSlat, setRouteSlat] = useState(0);
+    const [routeSlong, setRouteSlong] = useState(0);
+    const [routeElat, setRouteElat] = useState(0);
+    const [routeElong, setRouteElong] = useState(0);
 
     return (
         <div className="App">
-            <p>testing</p>
-            <Maps />
+            <header className="App-header">
+                <img src={logo} className="App-logo" alt="logo"/>
+                <TextBox label="Source Latitude" value={startLat} setter={setStartLat}/>
+                <TextBox label="Source Longitude" value={startLon} setter={setStartLon}/>
+                <TextBox label="Dest Latitude" value={endLat} setter={setEndLat}/>
+                <TextBox label="Dest Longitude" value={endLon} setter={setEndLon}/>
+                {/*<DisplayDebug d={startLat}/>*/}
+                {/*<DisplayDebug d={startLon}/>*/}
+                {/*<DisplayDebug d={endLat}/>*/}
+                {/*<DisplayDebug d={endLon}/>*/}
+                {/*<Route slat={routeSlat} slong={routeSlong} elat={routeElat} elong={routeElong}/>*/}
+                <Route slat={startLat} slong={startLon} elat={endLat} elong={endLon}/>
+            </header>
         </div>
     );
 }

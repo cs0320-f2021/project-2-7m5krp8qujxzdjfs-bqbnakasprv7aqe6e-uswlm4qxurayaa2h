@@ -1,11 +1,11 @@
-package edu.brown.cs.cs32friends.graph.search;
+package edu.brown.cs.student.graph.search;
 
 import java.util.List;
 
-import edu.brown.cs.cs32friends.graph.EdgeStorable;
-import edu.brown.cs.cs32friends.graph.ValuedEdge;
-import edu.brown.cs.cs32friends.graph.ValuedVertex;
-import edu.brown.cs.cs32friends.graph.VertexStorable;
+import edu.brown.cs.student.graph.EdgeStorable;
+import edu.brown.cs.student.graph.ValuedEdge;
+import edu.brown.cs.student.graph.ValuedVertex;
+import edu.brown.cs.student.graph.VertexStorable;
 
 /**
  * An interface for graph search algorithms.

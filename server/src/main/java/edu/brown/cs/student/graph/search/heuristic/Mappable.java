@@ -1,4 +1,4 @@
-package edu.brown.cs.cs32friends.graph.search.heuristic;
+package edu.brown.cs.student.graph.search.heuristic;
 
 /**
  * An interface for objects that have latitude and longitude coordinates.

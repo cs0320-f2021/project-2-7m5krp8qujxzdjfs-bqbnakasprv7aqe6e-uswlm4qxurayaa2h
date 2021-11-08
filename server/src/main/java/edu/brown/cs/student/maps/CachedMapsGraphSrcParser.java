@@ -1,14 +1,14 @@
-package edu.brown.cs.cs32friends.maps;
+package edu.brown.cs.student.maps;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import edu.brown.cs.cs32friends.graph.EdgeStorable;
-import edu.brown.cs.cs32friends.graph.GraphSourceParser;
-import edu.brown.cs.cs32friends.graph.ValuedEdge;
-import edu.brown.cs.cs32friends.graph.ValuedVertex;
-import edu.brown.cs.cs32friends.graph.VertexStorable;
+import edu.brown.cs.student.graph.EdgeStorable;
+import edu.brown.cs.student.graph.GraphSourceParser;
+import edu.brown.cs.student.graph.ValuedEdge;
+import edu.brown.cs.student.graph.ValuedVertex;
+import edu.brown.cs.student.graph.VertexStorable;
 
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -38,7 +38,7 @@ public class CachedMapsGraphSrcParser
     edgeValueCache = CacheBuilder.newBuilder()
         .maximumSize(maxEdgeSize)
         .build(
-            new CacheLoader<>() {
+            new CacheLoader<T,Set<W>>() {
               public Set<W> load(T key) {
                 return parser.getEdgeValues(key);
               }
@@ -47,7 +47,7 @@ public class CachedMapsGraphSrcParser
     vertValueCache = CacheBuilder.newBuilder()
         .maximumSize(maxVertSize)
         .build(
-            new CacheLoader<>() {
+            new CacheLoader<String,T>() {
               public T load(String key) {
                 return parser.getVertexValue(key);
               }

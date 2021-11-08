@@ -1,14 +1,14 @@
-package edu.brown.cs.cs32friends.main;
+package edu.brown.cs.student.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.brown.cs.cs32friends.handlers.maps.MapsHandler;
-import edu.brown.cs.cs32friends.handlers.maps.NearestHandler;
-import edu.brown.cs.cs32friends.handlers.maps.RouteHandler;
-import edu.brown.cs.cs32friends.handlers.maps.WaysHandler;
+import edu.brown.cs.student.handlers.maps.MapsHandler;
+import edu.brown.cs.student.handlers.maps.NearestHandler;
+import edu.brown.cs.student.handlers.maps.RouteHandler;
+import edu.brown.cs.student.handlers.maps.WaysHandler;
 
 /**
  * REPL class for interpreting data from the command line and preparing the

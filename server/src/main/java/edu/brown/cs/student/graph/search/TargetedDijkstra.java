@@ -1,4 +1,4 @@
-package edu.brown.cs.cs32friends.graph.search;
+package edu.brown.cs.student.graph.search;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import edu.brown.cs.cs32friends.graph.EdgeStorable;
-import edu.brown.cs.cs32friends.graph.ValuedEdge;
-import edu.brown.cs.cs32friends.graph.ValuedVertex;
-import edu.brown.cs.cs32friends.graph.VertexStorable;
+import edu.brown.cs.student.graph.EdgeStorable;
+import edu.brown.cs.student.graph.ValuedEdge;
+import edu.brown.cs.student.graph.ValuedVertex;
+import edu.brown.cs.student.graph.VertexStorable;
 
 /**
  * * A {@link GraphSearch} that is a version of Dijkstra's algorithm that finds

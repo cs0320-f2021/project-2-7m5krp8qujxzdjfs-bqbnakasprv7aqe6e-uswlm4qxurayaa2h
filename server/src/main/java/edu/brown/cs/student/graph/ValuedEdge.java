@@ -1,4 +1,4 @@
-package edu.brown.cs.cs32friends.graph;
+package edu.brown.cs.student.graph;
 
 /**
  * An interface for edges on a graph that holds an Object.

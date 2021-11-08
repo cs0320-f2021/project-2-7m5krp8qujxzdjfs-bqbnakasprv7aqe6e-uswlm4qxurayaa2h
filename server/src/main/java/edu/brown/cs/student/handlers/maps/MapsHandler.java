@@ -1,16 +1,16 @@
-package edu.brown.cs.cs32friends.handlers.maps;
+package edu.brown.cs.student.handlers.maps;
 
 import java.util.List;
 
-import edu.brown.cs.cs32friends.graph.Graph;
-import edu.brown.cs.cs32friends.graph.GraphSourceParser;
-import edu.brown.cs.cs32friends.graph.lazy.LazyGraph;
-import edu.brown.cs.cs32friends.main.CommandHandler;
-import edu.brown.cs.cs32friends.main.ParseCommands;
-import edu.brown.cs.cs32friends.maps.CachedMapsGraphSrcParser;
-import edu.brown.cs.cs32friends.maps.MapNode;
-import edu.brown.cs.cs32friends.maps.MapsDatabase;
-import edu.brown.cs.cs32friends.maps.Way;
+import edu.brown.cs.student.graph.Graph;
+import edu.brown.cs.student.graph.GraphSourceParser;
+import edu.brown.cs.student.graph.lazy.LazyGraph;
+import edu.brown.cs.student.main.CommandHandler;
+import edu.brown.cs.student.main.ParseCommands;
+import edu.brown.cs.student.maps.CachedMapsGraphSrcParser;
+import edu.brown.cs.student.maps.MapNode;
+import edu.brown.cs.student.maps.MapsDatabase;
+import edu.brown.cs.student.maps.Way;
 
 /**
  * MapsHandler class to provide output for the map command.

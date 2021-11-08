@@ -1,4 +1,4 @@
-package edu.brown.cs.cs32friends.graph;
+package edu.brown.cs.student.graph;
 
 import java.util.Set;
 

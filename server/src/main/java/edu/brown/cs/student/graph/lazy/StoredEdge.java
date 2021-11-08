@@ -1,9 +1,9 @@
-package edu.brown.cs.cs32friends.graph.lazy;
+package edu.brown.cs.student.graph.lazy;
 
-import edu.brown.cs.cs32friends.graph.EdgeStorable;
-import edu.brown.cs.cs32friends.graph.ValuedEdge;
-import edu.brown.cs.cs32friends.graph.ValuedVertex;
-import edu.brown.cs.cs32friends.graph.VertexStorable;
+import edu.brown.cs.student.graph.EdgeStorable;
+import edu.brown.cs.student.graph.ValuedEdge;
+import edu.brown.cs.student.graph.ValuedVertex;
+import edu.brown.cs.student.graph.VertexStorable;
 
 /**
  * An edge of a graph that stores any kind of value.

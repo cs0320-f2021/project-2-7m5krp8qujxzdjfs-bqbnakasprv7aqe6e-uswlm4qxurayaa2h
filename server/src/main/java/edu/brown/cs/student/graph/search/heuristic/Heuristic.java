@@ -1,6 +1,6 @@
-package edu.brown.cs.cs32friends.graph.search.heuristic;
+package edu.brown.cs.student.graph.search.heuristic;
 
-import edu.brown.cs.cs32friends.graph.search.AStar;
+import edu.brown.cs.student.graph.search.AStar;
 
 /**
  * An interface for a heuristic function for {@link AStar} search algorithm.

@@ -1,6 +1,6 @@
-package edu.brown.cs.cs32friends.graph.search.heuristic;
+package edu.brown.cs.student.graph.search.heuristic;
 
-import edu.brown.cs.cs32friends.maps.MapNode;
+import edu.brown.cs.student.maps.MapNode;
 
 /**
  * A {@link Heuristic} function for

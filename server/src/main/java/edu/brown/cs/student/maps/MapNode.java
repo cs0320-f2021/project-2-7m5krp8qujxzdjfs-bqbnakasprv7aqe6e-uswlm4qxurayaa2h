@@ -1,11 +1,11 @@
-package edu.brown.cs.cs32friends.maps;
+package edu.brown.cs.student.maps;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-import edu.brown.cs.cs32friends.graph.VertexStorable;
-import edu.brown.cs.cs32friends.graph.search.heuristic.Mappable;
-import edu.brown.cs.cs32friends.kdtree.KDTreeNode;
+import edu.brown.cs.student.graph.VertexStorable;
+import edu.brown.cs.student.graph.search.heuristic.Mappable;
+import edu.brown.cs.student.kdtree.KDTreeNode;
 
 /**
  * MapNode class to store information for a KDTree about a node's id, latitude,

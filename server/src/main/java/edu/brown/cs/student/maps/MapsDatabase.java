@@ -1,4 +1,4 @@
-package edu.brown.cs.cs32friends.maps;
+package edu.brown.cs.student.maps;
 
 import java.io.File;
 import java.sql.Connection;
@@ -11,14 +11,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import edu.brown.cs.cs32friends.graph.EdgeStorable;
-import edu.brown.cs.cs32friends.graph.GraphSourceParser;
-import edu.brown.cs.cs32friends.graph.VertexStorable;
-import edu.brown.cs.cs32friends.graph.search.heuristic.HaversineHeuristic;
-import edu.brown.cs.cs32friends.graph.search.heuristic.Heuristic;
-import edu.brown.cs.cs32friends.graph.search.heuristic.Mappable;
-import edu.brown.cs.cs32friends.kdtree.KDTree;
-import edu.brown.cs.cs32friends.main.ParseCommands;
+import edu.brown.cs.student.graph.EdgeStorable;
+import edu.brown.cs.student.graph.GraphSourceParser;
+import edu.brown.cs.student.graph.VertexStorable;
+import edu.brown.cs.student.graph.search.heuristic.HaversineHeuristic;
+import edu.brown.cs.student.graph.search.heuristic.Heuristic;
+import edu.brown.cs.student.graph.search.heuristic.Mappable;
+import edu.brown.cs.student.kdtree.KDTree;
+import edu.brown.cs.student.main.ParseCommands;
 
 /**
  * MapsDatabase class to store information about the database from maps.

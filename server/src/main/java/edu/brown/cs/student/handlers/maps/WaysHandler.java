@@ -1,9 +1,9 @@
-package edu.brown.cs.cs32friends.handlers.maps;
+package edu.brown.cs.student.handlers.maps;
 
 import java.util.List;
 
-import edu.brown.cs.cs32friends.main.CommandHandler;
-import edu.brown.cs.cs32friends.main.ParseCommands;
+import edu.brown.cs.student.main.CommandHandler;
+import edu.brown.cs.student.main.ParseCommands;
 
 /**
  * WaysHandler class to provide output for the way command.

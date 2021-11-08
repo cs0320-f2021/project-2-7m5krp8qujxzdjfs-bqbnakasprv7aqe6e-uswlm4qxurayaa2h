@@ -1,6 +1,6 @@
-package edu.brown.cs.cs32friends.maps;
+package edu.brown.cs.student.maps;
 
-import edu.brown.cs.cs32friends.kdtree.KDTree;
+import edu.brown.cs.student.kdtree.KDTree;
 
 /**
  * NearestMap class to find the MapNode closest to a targetPoint.

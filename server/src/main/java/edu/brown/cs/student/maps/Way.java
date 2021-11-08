@@ -1,8 +1,8 @@
-package edu.brown.cs.cs32friends.maps;
+package edu.brown.cs.student.maps;
 
 import java.util.Objects;
 
-import edu.brown.cs.cs32friends.graph.EdgeStorable;
+import edu.brown.cs.student.graph.EdgeStorable;
 
 /**
  * Way class to store information about Ways as an Edge for a search algorithm.

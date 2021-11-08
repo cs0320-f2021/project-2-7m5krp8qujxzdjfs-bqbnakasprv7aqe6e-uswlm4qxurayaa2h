@@ -1,4 +1,4 @@
-package edu.brown.cs.cs32friends.gui;
+package edu.brown.cs.student.gui;
 
 import java.util.Map;
 

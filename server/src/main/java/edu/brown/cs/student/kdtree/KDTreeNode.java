@@ -1,4 +1,4 @@
-package edu.brown.cs.cs32friends.kdtree;
+package edu.brown.cs.student.kdtree;
 
 /**
  * Interface KDTreeNode is a type that allows for more generic things to be

@@ -1,4 +1,4 @@
-package edu.brown.cs.cs32friends.kdtree;
+package edu.brown.cs.student.kdtree;
 
 import java.util.ArrayList;
 import java.util.Collections;

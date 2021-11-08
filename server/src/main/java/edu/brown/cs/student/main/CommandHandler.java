@@ -1,4 +1,4 @@
-package edu.brown.cs.cs32friends.main;
+package edu.brown.cs.student.main;
 
 /**
  * CommandHandler interface meant for standardizing output for the input and
