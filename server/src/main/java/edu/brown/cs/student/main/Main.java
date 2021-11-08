@@ -91,7 +91,8 @@ public final class Main {
     FreeMarkerEngine freeMarker = createEngine();
 
     // Setup Spark Routes
-    Spark.get("/nearest", new NearestGUI()); // THINK: would a GET or POST request be better?
+    Spark.get("/nearest", new NearestGUI());
+    Spark.get("/ways", new WaysGUI()); // THINK: would a GET or POST request be better?
 
 
   }

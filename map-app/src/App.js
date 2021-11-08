@@ -1,10 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
 import Route from './Route.js';
 import {useState} from "react";
 import {AwesomeButton} from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
-
+import Maps from "./Maps";
 
 function App() {
     function TextBox(props) {
@@ -15,9 +14,6 @@ function App() {
         </input>
     }
 
-    function DisplayDebug(props) {
-        return <header>{props.d}</header>
-    }
 
     const [startLat, setStartLat] = useState(0);
     const [startLon, setStartLon] = useState(0);
@@ -32,17 +28,13 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo"/>
                 <TextBox label="Source Latitude" value={startLat} setter={setStartLat}/>
                 <TextBox label="Source Longitude" value={startLon} setter={setStartLon}/>
                 <TextBox label="Dest Latitude" value={endLat} setter={setEndLat}/>
                 <TextBox label="Dest Longitude" value={endLon} setter={setEndLon}/>
-                {/*<DisplayDebug d={startLat}/>*/}
-                {/*<DisplayDebug d={startLon}/>*/}
-                {/*<DisplayDebug d={endLat}/>*/}
-                {/*<DisplayDebug d={endLon}/>*/}
-                {/*<Route slat={routeSlat} slong={routeSlong} elat={routeElat} elong={routeElong}/>*/}
-                <Route slat={startLat} slong={startLon} elat={endLat} elong={endLon}/>
+                <Maps />
+
+                {/*<Route slat={startLat} slong={startLon} elat={endLat} elong={endLon}/>*/}
             </header>
         </div>
     );
