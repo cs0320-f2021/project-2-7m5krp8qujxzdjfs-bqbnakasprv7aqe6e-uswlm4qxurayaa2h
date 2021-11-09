@@ -123,11 +123,27 @@ public class MapsDatabase implements GraphSourceParser {
       double lon2) {
 
     List<String> output = new ArrayList<>();
+    // TODO: implement this function! to get the tests to pass
+    // TODO: and then maybe create an alternate version of this function for you to use in your API
+
+    // get a list of all the traversable ways we have
+    // TODO SHOULDNT THIS BE NONTRAVERASBLE AS WELL
+    List<MapNode> mapNodes = getTraversableWays();
+
+    // filter that list based on which mapnodes are within lat inputs
+    // then get all of the sets of ways for each node and combine those sets
+    Set<Way> allWays = new Set<>();
+    for (MapNode mn : mapNodes) {
+      if (mn.getCoord(0) < lat1 && mn.getCoord(1))  {
+        //get the ways and add to allWays
+      }
+    }
+
+    // for each way in the set, get the string and add to the output list and then return that list
+
+    // it's fine if the ways draw off the canvas, weactually want that. we just have to take that into acct when drawing them
 
 
-
-    // TODO: implement this function!
-    // TODO: maybe create an alternate version of this function for you to use in your API
     return output;
   }
 
