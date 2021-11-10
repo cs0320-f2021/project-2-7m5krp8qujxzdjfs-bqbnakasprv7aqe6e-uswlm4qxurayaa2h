@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -132,9 +133,15 @@ public class MapsDatabase implements GraphSourceParser {
     // then get all of the sets of ways for each node and combine those sets
     Set<Way> allWays = new HashSet<>();
     for (MapNode mn : mapNodes) {
-      //TODO double check that this is oriented the right way, assuming numbers get higher as they go north and higher east
-      if ((mn.getCoord(0) < lat1 && mn.getCoord(0) > lat2) && (mn.getCoord(1) > lon1 && mn.getCoord(1) < lon2))  {
+
+
+
+      if ((mn.getCoord(0) <= lat1 && mn.getCoord(0) >= lat2) && (mn.getCoord(1) >= lon1 && mn.getCoord(1) <= lon2))  {
         //get the ways and add to allWays
+        System.out.println(mn.getID() + " " + mn.getCoord(0) + " lat1lat2 " + lat1 + " " + lat2);
+        System.out.println(mn.getID() + " " + mn.getCoord(1) + " lon1lon2 " + lon1 + " " + lon2);
+        for (Way w:getEdgeValues(mn)) { System.out.println(w.getId()); }
+
         Set<Way> mnWays = getEdgeValues(mn);
         allWays.addAll(mnWays);
       }
@@ -144,6 +151,10 @@ public class MapsDatabase implements GraphSourceParser {
     for (Way w : allWays) {
       output.add(w.getId());
     }
+
+    // sort the ways
+    //(o1, o2) -> Integer.parseInt(o1.split("/")[2]) - Integer.parseInt(o2.split("/")[2])
+    Collections.sort(output, Comparator.comparingInt(o -> Integer.parseInt(o.split("/")[2])));
 
     // it's fine if the ways draw off the canvas, we actually want that. we just have to take that into acct when drawing them
     return output;
