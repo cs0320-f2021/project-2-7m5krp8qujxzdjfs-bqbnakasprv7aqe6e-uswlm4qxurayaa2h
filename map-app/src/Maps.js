@@ -86,8 +86,8 @@ function Maps() {
     return (
         <div className="Maps">
             <p>CANVAS below!!!!!!</p>
-            <Canvas mapView={mapView} ways={canvasWays} waysFetched={waysFetched}
-            setMapView={setMapView} />
+            <Canvas mapView={mapView} ways={canvasWays} waysFetched={waysFetched} setMapView={setMapView}
+                    minLat={INIT_MIN_LAT} maxLon={INIT_MAX_LON} maxLat={INIT_MAX_LAT} minLon={INIT_MAX_LON}/>
         </div>
 
     );
