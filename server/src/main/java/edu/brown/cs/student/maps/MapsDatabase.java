@@ -133,16 +133,13 @@ public class MapsDatabase implements GraphSourceParser {
     // then get all of the sets of ways for each node and combine those sets
     Set<Way> allWays = new HashSet<>();
     for (MapNode mn : mapNodes) {
-
-
-
       if ((mn.getCoord(0) <= lat1 && mn.getCoord(0) >= lat2) && (mn.getCoord(1) >= lon1 && mn.getCoord(1) <= lon2))  {
         //get the ways and add to allWays
         System.out.println(mn.getID() + " " + mn.getCoord(0) + " lat1lat2 " + lat1 + " " + lat2);
         System.out.println(mn.getID() + " " + mn.getCoord(1) + " lon1lon2 " + lon1 + " " + lon2);
         for (Way w:getEdgeValues(mn)) { System.out.println(w.getId()); }
 
-        Set<Way> mnWays = getEdgeValues(mn);
+        Set<Way> mnWays = getAllEdgeValues(mn);
         allWays.addAll(mnWays);
       }
     }
@@ -309,6 +306,46 @@ public class MapsDatabase implements GraphSourceParser {
       prep.close();
 
       return traversableWays;
+    } catch (SQLException e) {
+      throw new IllegalArgumentException("Invalid database.");
+    }
+  }
+
+  // NEW FUNCTION ADDED BY INTEGRATION GROUP
+  /**
+   * Gets all the edges connected to v.
+   *
+   * @param v the vertex whose edges we wish to get.
+   * @return A set of {@link Way}s that are connected to a {@link MapNode}, out or in
+   */
+  public Set<Way> getAllEdgeValues(VertexStorable v)
+      throws IllegalArgumentException {
+    try {
+      if (v == null || !(v instanceof MapNode)) {
+        throw new IllegalArgumentException(
+            "Cannot pass non-Actor to find edges on graph.");
+      }
+      MapNode m = (MapNode) v;
+      // Get all the Ways
+      PreparedStatement prep = conn.prepareStatement("SELECT * FROM way AS w "
+          + " WHERE w.start = ? OR w.end = ?;");
+      prep.setString(1, m.getID());
+      prep.setString(2, m.getID());
+      ResultSet rs = prep.executeQuery();
+
+      Set<Way> allWays = new HashSet<>();
+      while (rs.next()) {
+        // Get the end MapNode so that the destinations can be calculated
+        String id = rs.getString(1);
+        String endNodeID = rs.getString(5);
+        MapNode endNode = getVertexValue(endNodeID);
+        double edgeWt = distCalc.getEstimate(m, endNode);
+        allWays.add(new Way(id, edgeWt, endNode));
+      }
+      rs.close();
+      prep.close();
+
+      return allWays;
     } catch (SQLException e) {
       throw new IllegalArgumentException("Invalid database.");
     }
