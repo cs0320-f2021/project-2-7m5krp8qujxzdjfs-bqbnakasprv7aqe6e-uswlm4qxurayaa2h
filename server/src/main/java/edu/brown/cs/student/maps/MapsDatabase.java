@@ -135,10 +135,6 @@ public class MapsDatabase implements GraphSourceParser {
     for (MapNode mn : mapNodes) {
       if ((mn.getCoord(0) <= lat1 && mn.getCoord(0) >= lat2) && (mn.getCoord(1) >= lon1 && mn.getCoord(1) <= lon2))  {
         //get the ways and add to allWays
-        System.out.println(mn.getID() + " " + mn.getCoord(0) + " lat1lat2 " + lat1 + " " + lat2);
-        System.out.println(mn.getID() + " " + mn.getCoord(1) + " lon1lon2 " + lon1 + " " + lon2);
-        for (Way w:getEdgeValues(mn)) { System.out.println(w.getId()); }
-
         Set<Way> mnWays = getAllEdgeValues(mn);
         allWays.addAll(mnWays);
       }
@@ -150,7 +146,6 @@ public class MapsDatabase implements GraphSourceParser {
     }
 
     // sort the ways
-    //(o1, o2) -> Integer.parseInt(o1.split("/")[2]) - Integer.parseInt(o2.split("/")[2])
     Collections.sort(output, Comparator.comparingInt(o -> Integer.parseInt(o.split("/")[2])));
 
     // it's fine if the ways draw off the canvas, we actually want that. we just have to take that into acct when drawing them

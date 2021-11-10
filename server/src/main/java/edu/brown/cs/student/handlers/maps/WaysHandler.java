@@ -46,7 +46,6 @@ public class WaysHandler implements CommandHandler {
 
           }
         } catch (Exception e) {
-          e.printStackTrace();
           ParseCommands.setOutputString(
               "ERROR: Invalid data formats." + System.lineSeparator());
         }

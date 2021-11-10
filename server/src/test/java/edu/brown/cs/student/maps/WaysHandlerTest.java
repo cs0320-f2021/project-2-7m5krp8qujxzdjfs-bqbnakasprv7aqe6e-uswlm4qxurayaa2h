@@ -56,31 +56,17 @@ public class WaysHandlerTest {
         ParseCommands.getOutputString());
   }
 
-//  @Test
-//  public void someWays2() {
-//    // WARNING THIS TEST MIGHT BE WRONG
-//    // looking at just /n/0|41.82|-71.4
-//    setUp();
-//    ParseCommands.setInputLine("ways 41.8200001 -71.40000001 41.8199999 -71.39999999"); //ways 41.8210 -71.4100 41.8190 -71.3990
-//    WaysHandler handler = new WaysHandler();
-//    handler.handle();
-//    assertEquals(
-//        "/w/0" + System.lineSeparator() + "/w/2" + System.lineSeparator(),
-//        ParseCommands.getOutputString());
-//  }
-//
-//  @Test
-//  public void someWays3() {
-//    // WARNING THIS TEST MIGHT BE WRONG
-//    // looking at just /n/5|41.8206|-71.4003
-//    setUp();
-//    ParseCommands.setInputLine("ways 41.82060001 -71.4003000001 41.820599999 -71.40029999999"); //ways 41.8210 -71.4100 41.8190 -71.3990
-//    WaysHandler handler = new WaysHandler();
-//    handler.handle();
-//    assertEquals(
-//        System.lineSeparator(),
-//        ParseCommands.getOutputString());
-//  }
+  @Test
+  public void someWays2() {
+    // looking at just /n/0|41.82|-71.4
+    setUp();
+    ParseCommands.setInputLine("ways 41.8200001 -71.40000001 41.8199999 -71.39999999"); //ways 41.8210 -71.4100 41.8190 -71.3990
+    WaysHandler handler = new WaysHandler();
+    handler.handle();
+    assertEquals(
+        "/w/0" + System.lineSeparator() + "/w/2" + System.lineSeparator(),
+        ParseCommands.getOutputString());
+  }
 
   @Test
   public void waysBadData() {
