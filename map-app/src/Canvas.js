@@ -3,7 +3,15 @@ import {useEffect, useRef} from "react";
 function Canvas(props) {
     const canvasRef = useRef(null)
 
-    const coordToXY = (coord, width, height) => {}
+    const coordToXY = (coord, width, height) => {
+        const lon = coord[0]
+        const lat = coord[1]
+        const heightOffset = Math.abs(lat - props.minLat) / Math.abs(props.maxLat - props.minLat)
+        const widthOffset = Math.abs(lon - props.minLon) / Math.abs(props.maxLon - props.minLon)
+        const x = width * widthOffset
+        const y = height * heightOffset
+        return [x, y]
+    }
 
     const draw = (ctx, canvasRef) => {}
 
