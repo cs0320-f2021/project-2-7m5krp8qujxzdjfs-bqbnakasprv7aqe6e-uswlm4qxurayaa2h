@@ -92,9 +92,9 @@ public final class Main {
 
     // Setup Spark Routes
     Spark.get("/nearest", new NearestGUI());
-    Spark.get("/ways", new WaysGUI()); // THINK: would a GET or POST request be better?
-
-
+    // dubious
+    Spark.post("/ways", new WaysGUI()); // THINK: would a GET or POST request be better?
+    Spark.post("/route", new RouteHandler())
   }
 
   /**

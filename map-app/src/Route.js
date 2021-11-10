@@ -9,8 +9,7 @@ function Route(props) {
     function Button(props) {
         return <AwesomeButton type="primary" onPress={props.onPress}>Button</AwesomeButton>;
     }
-
-    //TODO: Fill in the ? with appropriate names/values for a route.
+    
     //Hint: The defaults for latitudes and longitudes were 0s. What might the default useState value for a route be?
     const [route, setRoute] = useState(0);
 
