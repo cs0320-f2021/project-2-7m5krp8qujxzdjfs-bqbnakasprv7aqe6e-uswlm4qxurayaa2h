@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import edu.brown.cs.student.gui.NearestGUI;
+import edu.brown.cs.student.gui.WaysGUI;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;

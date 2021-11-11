@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,7 +64,7 @@ public class MapsDatabase implements GraphSourceParser {
    *
    * @return a list of the traversable ways from this database.
    */
-  private List<MapNode> getTraversableWays() {
+  public List<MapNode> getTraversableWays() {
     List<MapNode> output = null;
 
     try {
@@ -123,27 +125,30 @@ public class MapsDatabase implements GraphSourceParser {
       double lon2) {
 
     List<String> output = new ArrayList<>();
-    // TODO: implement this function! to get the tests to pass
-    // TODO: and then maybe create an alternate version of this function for you to use in your API
 
     // get a list of all the traversable ways we have
-    // TODO SHOULDNT THIS BE NONTRAVERASBLE AS WELL
     List<MapNode> mapNodes = getTraversableWays();
 
     // filter that list based on which mapnodes are within lat inputs
     // then get all of the sets of ways for each node and combine those sets
-    Set<Way> allWays = new Set<>();
+    Set<Way> allWays = new HashSet<>();
     for (MapNode mn : mapNodes) {
-      if (mn.getCoord(0) < lat1 && mn.getCoord(1))  {
+      if ((mn.getCoord(0) <= lat1 && mn.getCoord(0) >= lat2) && (mn.getCoord(1) >= lon1 && mn.getCoord(1) <= lon2))  {
         //get the ways and add to allWays
+        Set<Way> mnWays = getAllEdgeValues(mn);
+        allWays.addAll(mnWays);
       }
     }
 
     // for each way in the set, get the string and add to the output list and then return that list
+    for (Way w : allWays) {
+      output.add(w.getId());
+    }
 
-    // it's fine if the ways draw off the canvas, weactually want that. we just have to take that into acct when drawing them
+    // sort the ways
+    Collections.sort(output, Comparator.comparingInt(o -> Integer.parseInt(o.split("/")[2])));
 
-
+    // it's fine if the ways draw off the canvas, we actually want that. we just have to take that into acct when drawing them
     return output;
   }
 
@@ -296,6 +301,46 @@ public class MapsDatabase implements GraphSourceParser {
       prep.close();
 
       return traversableWays;
+    } catch (SQLException e) {
+      throw new IllegalArgumentException("Invalid database.");
+    }
+  }
+
+  // NEW FUNCTION ADDED BY INTEGRATION GROUP
+  /**
+   * Gets all the edges connected to v.
+   *
+   * @param v the vertex whose edges we wish to get.
+   * @return A set of {@link Way}s that are connected to a {@link MapNode}, out or in
+   */
+  public Set<Way> getAllEdgeValues(VertexStorable v)
+      throws IllegalArgumentException {
+    try {
+      if (v == null || !(v instanceof MapNode)) {
+        throw new IllegalArgumentException(
+            "Cannot pass non-Actor to find edges on graph.");
+      }
+      MapNode m = (MapNode) v;
+      // Get all the Ways
+      PreparedStatement prep = conn.prepareStatement("SELECT * FROM way AS w "
+          + " WHERE w.start = ? OR w.end = ?;");
+      prep.setString(1, m.getID());
+      prep.setString(2, m.getID());
+      ResultSet rs = prep.executeQuery();
+
+      Set<Way> allWays = new HashSet<>();
+      while (rs.next()) {
+        // Get the end MapNode so that the destinations can be calculated
+        String id = rs.getString(1);
+        String endNodeID = rs.getString(5);
+        MapNode endNode = getVertexValue(endNodeID);
+        double edgeWt = distCalc.getEstimate(m, endNode);
+        allWays.add(new Way(id, edgeWt, endNode));
+      }
+      rs.close();
+      prep.close();
+
+      return allWays;
     } catch (SQLException e) {
       throw new IllegalArgumentException("Invalid database.");
     }
