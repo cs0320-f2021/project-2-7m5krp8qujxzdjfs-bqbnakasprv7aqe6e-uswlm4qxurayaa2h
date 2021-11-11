@@ -30,13 +30,13 @@ public class WaysGUI implements Route {
 		MapsDatabase db = new MapsDatabase("data/maps/smallMaps.sqlite3");
 
 
-		List<String> ways = db.getWays(lat1, lon1, lat2, lon2);
+		List<List<String>> ways = db.getWindowWays(lat1, lon1, lat2, lon2);
 		System.out.println("asdf"+ways);
 
 		// what if we store each way as a Way object with id, lat, and lon
 		// getWays returns a lst = List<Way>
 		// and then ImmutableMap.of("ways", lst)
-		Map<String, List<String>> variables = ImmutableMap.of("ways", ways);
+		Map<String, List<List<String>>> variables = ImmutableMap.of("ways", ways);
 
 		return gson.toJson(variables);
 	}

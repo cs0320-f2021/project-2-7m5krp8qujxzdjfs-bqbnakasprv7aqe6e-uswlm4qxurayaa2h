@@ -10,6 +10,7 @@ import edu.brown.cs.student.graph.EdgeStorable;
 public class Way implements EdgeStorable {
   private String id;
   private double wt;
+  private MapNode startNode;
   private MapNode endNode;
 
   /**
@@ -22,6 +23,20 @@ public class Way implements EdgeStorable {
   public Way(String id, double weight, MapNode endNode) {
     this.id = id;
     this.wt = weight;
+    this.endNode = endNode;
+  }
+
+  /**
+   * Constructs a new Way.
+   *
+   * @param id      the ID of the Way
+   * @param weight  the great circle between the endpoints of the Way
+   * @param endNode the {@link MapNode} that this Way points to
+   */
+  public Way(String id, double weight, MapNode startNode, MapNode endNode) {
+    this.id = id;
+    this.wt = weight;
+    this.startNode = startNode;
     this.endNode = endNode;
   }
 
@@ -44,6 +59,17 @@ public class Way implements EdgeStorable {
    */
   public String getId() {
     return id;
+  }
+
+  /**
+   * Gets the {@link MapNode} to be contained in the destination
+   * {@link edu.brown.cs.cs32friends.graph.ValuedVertex}.
+   *
+   * @return a {@link MapNode} to be contained in the destination
+   * {@link edu.brown.cs.cs32friends.graph.ValuedVertex}
+   */
+  public MapNode getStartNode() {
+    return startNode;
   }
 
   /**

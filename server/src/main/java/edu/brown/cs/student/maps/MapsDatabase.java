@@ -90,6 +90,35 @@ public class MapsDatabase implements GraphSourceParser {
   }
 
   /**
+   * Gets all the traversable ways from the database for the KDTree.
+   *
+   * @return a list of all traversable and nontraversable ways from this database.
+   */
+  public List<MapNode> getAllWays() {
+    List<MapNode> output = null;
+
+    try {
+      output = new ArrayList<>();
+      PreparedStatement prep;
+      // Pulling the three relevant node characteristics
+      prep = conn.prepareStatement(
+          "SELECT DISTINCT node.id, node.latitude, node.longitude FROM node JOIN way ON "
+              + "(node.id = way.start OR node.id = way.end);");
+      ResultSet result = prep.executeQuery();
+      while (result.next()) {
+        MapNode node = new MapNode(result.getString(1), result.getDouble(2),
+            result.getDouble(3));
+        output.add(node);
+      }
+      result.close();
+      prep.close();
+    } catch (Exception e) {
+      ParseCommands.setOutputString("ERROR: Invalid database operation.");
+    }
+    return output;
+  }
+
+  /**
    * Checks to see whether the database inputted can adequately be searched for
    * actors.
    *
@@ -147,6 +176,59 @@ public class MapsDatabase implements GraphSourceParser {
 
     // sort the ways
     Collections.sort(output, Comparator.comparingInt(o -> Integer.parseInt(o.split("/")[2])));
+
+    // it's fine if the ways draw off the canvas, we actually want that. we just have to take that into acct when drawing them
+    return output;
+  }
+
+  /**
+   * Returns a list of way IDs between lat1, lon1, and lat2, lon2.
+   *
+   * @param lat1 the northern position of the bounding box.
+   * @param lon1 the western position of the bounding box.
+   * @param lat2 the southern position of the bounding box.
+   * @param lon2 the eastern position of the bounding box.
+   * @return a list of the way IDs and coordinates between lat1, lon1 and lat2, lon2.
+   */
+  public List<List<String>> getWindowWays(double lat1, double lon1, double lat2,
+                              double lon2) {
+
+    List<List<String>> output = new ArrayList<>();
+
+    // get a list of all the traversable ways we have
+    List<MapNode> mapNodes = getAllWays();
+
+    // filter that list based on which mapnodes are within lat inputs
+    // then get all of the sets of ways for each node and combine those sets
+    Set<Way> allWays = new HashSet<>();
+    for (MapNode mn : mapNodes) {
+      if ((mn.getCoord(0) <= lat1 && mn.getCoord(0) >= lat2) && (mn.getCoord(1) >= lon1 && mn.getCoord(1) <= lon2))  {
+        //get the ways and add to allWays
+        Set<Way> mnWays = getAllEdgeValues(mn);
+        allWays.addAll(mnWays);
+      }
+    }
+
+    // for each way in the set, get the string and add to the output list and then return that list
+    for (Way w : allWays) {
+      List<String> l = new ArrayList<>();
+      // node id
+      l.add(w.getId());
+
+      // start node latitudes and longitudes
+      l.add(Double.toString(w.getStartNode().getCoord(0)));
+      l.add(Double.toString(w.getStartNode().getCoord(1)));
+
+      // end node latitudes and longitudes
+      l.add(Double.toString(w.getEndNode().getCoord(0)));
+      l.add(Double.toString(w.getEndNode().getCoord(1)));
+
+      // add to output list
+      output.add(l);
+    }
+
+    // sort the ways
+//    Collections.sort(output, Comparator.comparingInt(o -> Integer.parseInt(o.split("/")[2])));
 
     // it's fine if the ways draw off the canvas, we actually want that. we just have to take that into acct when drawing them
     return output;
@@ -332,10 +414,12 @@ public class MapsDatabase implements GraphSourceParser {
       while (rs.next()) {
         // Get the end MapNode so that the destinations can be calculated
         String id = rs.getString(1);
+        String startNodeID = rs.getString(4);
         String endNodeID = rs.getString(5);
+        MapNode startNode = getVertexValue(startNodeID);
         MapNode endNode = getVertexValue(endNodeID);
         double edgeWt = distCalc.getEstimate(m, endNode);
-        allWays.add(new Way(id, edgeWt, endNode));
+        allWays.add(new Way(id, edgeWt, startNode, endNode));
       }
       rs.close();
       prep.close();

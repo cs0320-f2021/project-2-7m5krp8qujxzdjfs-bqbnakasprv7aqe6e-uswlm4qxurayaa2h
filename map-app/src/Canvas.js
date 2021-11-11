@@ -20,10 +20,17 @@ function Canvas(props) {
     // { ["name": "Waterman St", "startCoord": [lon, lat], "endCoord": ],
     //   ["name": "Thayer St", "startCoord": [lon, lat], "endCoord": [lon, lat]] }
     const draw = (ctx, canvasWays) => {
+        console.log("drawing")
         ctx.beginPath()
-        for (let way in canvasWays) {
-            let startXY = coordToXY(way.startCoord, canvasRef.current.width, canvasRef.current.height)
-            let endXY = coordToXY(way.endCoord, canvasRef.current.width, canvasRef.current.height)
+        console.log("canvasWays:", canvasWays)
+        for (const way in canvasWays) {
+            const startCoord = [way[1], way[2]]
+            console.log("way[1]:", way[1])
+            console.log("startCoord:", startCoord)
+            const endCoord = [way[3], way[4]]
+            console.log("endCoord:" + endCoord)
+            let startXY = coordToXY(startCoord, canvasRef.current.width, canvasRef.current.height)
+            let endXY = coordToXY(endCoord, canvasRef.current.width, canvasRef.current.height)
             console.log("startX:" + startXY[0])
             console.log("startY:" + startXY[1])
             console.log("endX:", endXY[0])
@@ -36,23 +43,20 @@ function Canvas(props) {
 
     useEffect(() => {
         if (canvasRef) {
+            console.log("made it!")
+            console.log("props.ways.current:", props.ways.current)
             const ctx = canvasRef.current.getContext('2d')
-            // ctx.fillStyle = '#3e3ed3';
-            // ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-            // ctx.moveTo(0, 0);
-            // ctx.lineTo(500, 500);
-            // ctx.moveTo(0, 0);
-            //
-            // ctx.stroke();
+            if (props.ways.current.ways !== undefined) {
+                console.log("made it again!")
 
-            if (props.ways.current.ways) {
                 draw(ctx, props.ways.current.ways)
             }
+
         }
     })
 
     return (
-        <div style={{border:"1px solid black", width:"min-content", height: "min-content"}}>
+        <div style={{border: "1px solid black", width: "min-content", height: "min-content"}}>
             <canvas ref={canvasRef} width={500} height={500}/>
         </div>
     );
