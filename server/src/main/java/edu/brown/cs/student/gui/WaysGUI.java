@@ -27,17 +27,16 @@ public class WaysGUI implements Route {
 		double lat2 = data.getDouble("lat2");
 		double lon2 = data.getDouble("lon2");
 
-		MapsDatabase db = new MapsDatabase("data/maps/modifiedSmallMaps.sqlite3");
-		System.out.println("asdf"+db.getTraversableWays().toString());
+		MapsDatabase db = new MapsDatabase("data/maps/smallMaps.sqlite3");
+
 
 		List<String> ways = db.getWays(lat1, lon1, lat2, lon2);
+		System.out.println("asdf"+ways);
 
 		// what if we store each way as a Way object with id, lat, and lon
 		// getWays returns a lst = List<Way>
 		// and then ImmutableMap.of("ways", lst)
-
-
-		Map<String, Object> variables = ImmutableMap.of("ways", ways);
+		Map<String, List<String>> variables = ImmutableMap.of("ways", ways);
 
 		return gson.toJson(variables);
 	}

@@ -5,10 +5,14 @@ function Maps() {
 
     // Code from Galen's video
     // Initial map view
-    const INIT_MIN_LON = -71.407971
-    const INIT_MIN_LAT = 41.823142
-    const INIT_MAX_LON = -71.392231
-    const INIT_MAX_LAT = 41.828147
+
+    //
+    // MAX_LAT MIN_LON MIN_LAT MAX_LON
+    const INIT_MAX_LAT = 42 // 41.828147
+    const INIT_MIN_LON = -72 // -71.407971
+    const INIT_MIN_LAT = 41.8 // 41.823142
+    const INIT_MAX_LON = -71.3 // -71.392231
+
 
     // ways to pass to the canvas
     const canvasWays = useRef([])
@@ -31,6 +35,7 @@ function Maps() {
     useEffect(() => {
         requestWays().then(ways => {
             canvasWays.current = ways
+            console.log(ways)
         })
     }, [mapView])
 
@@ -40,11 +45,19 @@ function Maps() {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
-                    'Access-Control-Allow-Origin': '*',
+                    "Access-Control-Allow-Origin": "*",
                 },
                 body: JSON.stringify({
-                    "northwest": [INIT_MAX_LAT, INIT_MIN_LON],
-                    "southeast": [INIT_MIN_LAT, INIT_MAX_LON]
+                    "lat1" : INIT_MAX_LAT,
+                    "lon1" : INIT_MIN_LON,
+                    "lat2" : INIT_MIN_LAT,
+                    "lon2" : INIT_MAX_LON
+                    // double lat1 = data.getDouble("lat1");
+                    // double lon1 = data.getDouble("lon1");
+                    // double lat2 = data.getDouble("lat2");
+                    // double lon2 = data.getDouble("lon2");
+                    // "northwest": [INIT_MAX_LAT, INIT_MIN_LON],
+                    // "southeast": [INIT_MIN_LAT, INIT_MAX_LON]
                 })
             }).then(response => response.json())
                 .then(response => {

@@ -9,6 +9,7 @@ import java.io.StringWriter;
 
 import edu.brown.cs.student.gui.NearestGUI;
 import edu.brown.cs.student.gui.WaysGUI;
+import edu.brown.cs.student.handlers.maps.RouteHandler;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -91,11 +92,27 @@ public final class Main {
 
     FreeMarkerEngine freeMarker = createEngine();
 
+    Spark.options("/*", (request, response) -> {
+      String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+      if (accessControlRequestHeaders != null) {
+        response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+      }
+
+      String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+
+      if (accessControlRequestMethod != null) {
+        response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+      }
+
+      return "OK";
+    });
+
+    Spark.before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+
     // Setup Spark Routes
     Spark.get("/nearest", new NearestGUI());
-    // dubious
     Spark.post("/ways", new WaysGUI()); // THINK: would a GET or POST request be better?
-    Spark.post("/route", new RouteHandler())
+    // Spark.post("/route", new RouteHandler());
   }
 
   /**
