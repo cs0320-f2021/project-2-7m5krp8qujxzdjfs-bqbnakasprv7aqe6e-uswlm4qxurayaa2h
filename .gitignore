@@ -6,3 +6,4 @@ target/
 **.DS_Store**
 *.prefs
 maps.sqlite3
+pvd.sqlite3
