@@ -10,35 +10,31 @@ function Canvas(props) {
         const widthOffset = Math.abs(lon - props.minLon) / Math.abs(props.maxLon - props.minLon)
         const x = width * widthOffset
         const y = height * heightOffset
+        console.log(x, y)
         return [x, y]
     }
 
     // { ["name": "Waterman St", "startCoord": [lon, lat], "endCoord": ],
     //   ["name": "Thayer St", "startCoord": [lon, lat], "endCoord": [lon, lat]] }
     const draw = (ctx, canvasWays) => {
-        let toDraw = canvasWays["ways:"]
-        console.log("toDraw:", toDraw)
         ctx.beginPath()
-        for (let i = 0; i < toDraw.length; i++) {
-            const way = toDraw[i]
-
-            console.log("where there's a will... there's a way:" + way)
+        console.log("canvasWays:", canvasWays)
+        canvasWays.forEach((way) => {
             const startCoord = [way[1], way[2]]
             const endCoord = [way[3], way[4]]
-            console.log(startCoord, endCoord)
             let startXY = coordToXY(startCoord, canvasRef.current.width, canvasRef.current.height)
             let endXY = coordToXY(endCoord, canvasRef.current.width, canvasRef.current.height)
             ctx.moveTo(startXY[0], startXY[1])
             ctx.lineTo(endXY[0], endXY[1])
-        }
+        })
         ctx.stroke()
     }
 
     useEffect(() => {
         if (canvasRef) {
             const ctx = canvasRef.current.getContext('2d')
-            if (props.ways) {
-                draw(ctx, props.ways)
+            if (props.ways.current.ways) {
+                draw(ctx, props.ways.current.ways)
             }
 
         }

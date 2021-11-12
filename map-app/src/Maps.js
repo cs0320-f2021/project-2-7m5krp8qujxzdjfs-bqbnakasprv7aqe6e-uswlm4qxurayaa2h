@@ -15,8 +15,7 @@ function Maps() {
 
 
     // ways to pass to the canvas
-    // const canvasWays = useRef([])
-    const [canvasWays, setCanvasWays] = useState([])
+    const canvasWays = useRef([])
 
     // stores an object of way boxes
     const [waysCache, setWaysCache] = useState({})
@@ -35,17 +34,12 @@ function Maps() {
 
     useEffect(() => {
         requestWays().then(ways => {
-            // canvasWays.current = ways
-            setCanvasWays(ways)
-            setLoading(false)
+            canvasWays.current = ways
             setWaysFetched(true)
-
-            // console.log("canvasWays:" + canvasWays)
         })
     }, [mapView])
 
     async function requestWays() {
-        setLoading(true)
         return new Promise((resolve, reject) => {
             fetch("http://localhost:4567/ways", {
                 method: 'POST',
@@ -75,9 +69,8 @@ function Maps() {
                         }
                         reject()
                     } else {
-                        console.log("ways:", response.ways)
                         resolve({
-                            "ways:" : response.ways
+                            "ways" : response.ways
                         })
                     }
                 })
@@ -85,29 +78,12 @@ function Maps() {
         })
     }
 
-    
-    // const canvasRef = useRef(null)
-    //
-    // //TODO loop through all of the ways and draw a line for each way
-    // useEffect( () => {
-    //     // const frame = new Image()
-    //     console.log("asdf")
-    //     const ctx = canvasRef.current.getContext('2d') // canvas lab
-    //     ctx.fillStyle = '#3e3ed3';
-    //     ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    //     ctx.moveTo(0, 0);
-    //     ctx.lineTo(500, 500);
-    //     ctx.stroke();
-    //
-    //     }, [])
-
-
 
     return (
         <div className="Maps">
             <p>CANVAS below!!!!!!</p>
             <Canvas mapView={mapView} ways={canvasWays} waysFetched={waysFetched} setMapView={setMapView}
-                    minLat={INIT_MIN_LAT} maxLon={INIT_MAX_LON} maxLat={INIT_MAX_LAT} minLon={INIT_MAX_LON}/>
+                    minLat={INIT_MIN_LAT} maxLon={INIT_MAX_LON} maxLat={INIT_MAX_LAT} minLon={INIT_MIN_LON}/>
         </div>
 
     );
