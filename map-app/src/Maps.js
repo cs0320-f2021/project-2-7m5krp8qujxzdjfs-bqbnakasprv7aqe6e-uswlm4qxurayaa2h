@@ -15,7 +15,8 @@ function Maps() {
 
 
     // ways to pass to the canvas
-    const canvasWays = useRef([])
+    // const canvasWays = useRef([])
+    const [canvasWays, setCanvasWays] = useState([])
 
     // stores an object of way boxes
     const [waysCache, setWaysCache] = useState({})
@@ -34,12 +35,17 @@ function Maps() {
 
     useEffect(() => {
         requestWays().then(ways => {
-            canvasWays.current = ways
-            console.log(ways)
+            // canvasWays.current = ways
+            setCanvasWays(ways)
+            setLoading(false)
+            setWaysFetched(true)
+
+            // console.log("canvasWays:" + canvasWays)
         })
     }, [mapView])
 
     async function requestWays() {
+        setLoading(true)
         return new Promise((resolve, reject) => {
             fetch("http://localhost:4567/ways", {
                 method: 'POST',
@@ -61,7 +67,6 @@ function Maps() {
                 })
             }).then(response => response.json())
                 .then(response => {
-                    console.log("Reponse:", response)
                     if ("error" in response) {
                         if (response.error === undefined) {
                             alert("An error occurred")
@@ -95,6 +100,8 @@ function Maps() {
     //     ctx.stroke();
     //
     //     }, [])
+
+
 
     return (
         <div className="Maps">
