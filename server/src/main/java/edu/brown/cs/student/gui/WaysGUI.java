@@ -27,7 +27,7 @@ public class WaysGUI implements Route {
 		double lat2 = data.getDouble("lat2");
 		double lon2 = data.getDouble("lon2");
 
-		MapsDatabase db = new MapsDatabase("data/maps/smallMaps.sqlite3");
+		MapsDatabase db = new MapsDatabase("data/maps/brown.sqlite3");
 
 		List<List<String>> ways = db.getWindowWays(lat1, lon1, lat2, lon2);
 		System.out.println("asdf"+ways);
