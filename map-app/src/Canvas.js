@@ -6,8 +6,6 @@ function Canvas(props) {
     const coordToXY = (coord, width, height) => {
         const lat = coord[0]
         const lon = coord[1]
-        // const heightOffset = Math.abs(props.maxLat - lat) / Math.abs(props.maxLat - props.minLat)
-        // const widthOffset = Math.abs(lon - props.minLon) / Math.abs(props.maxLon - props.minLon)
         const widthPercent = (lon - props.minLon) / (props.maxLon - props.minLon)
         const heightPercent = (lat - props.minLat) / (props.maxLat - props.minLat)
         const x = width * widthPercent
