@@ -431,7 +431,7 @@ function ScreenReader() {
     }
 
     return (
-        null
+        <div className={"ScreenReader"}/>
     );
 
 
