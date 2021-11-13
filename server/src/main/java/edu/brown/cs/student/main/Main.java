@@ -9,6 +9,7 @@ import java.io.StringWriter;
 
 import edu.brown.cs.student.gui.NearestGUI;
 import edu.brown.cs.student.gui.WaysGUI;
+import edu.brown.cs.student.gui.RouteGUI;
 import edu.brown.cs.student.handlers.maps.RouteHandler;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
@@ -112,7 +113,7 @@ public final class Main {
     // Setup Spark Routes
     Spark.get("/nearest", new NearestGUI());
     Spark.post("/ways", new WaysGUI()); // THINK: would a GET or POST request be better?
-    // Spark.post("/route", new RouteHandler());
+    Spark.post("/route", new RouteGUI());
   }
 
   /**

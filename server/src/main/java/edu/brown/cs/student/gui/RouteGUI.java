@@ -38,6 +38,9 @@ public class RouteGUI implements Route {
 		// and then ImmutableMap.of("ways", lst)
 		Map<String, List<List<Double>>> variables = ImmutableMap.of("route", route);
 
+//		System.out.println("route");
+//		System.out.println(route);
+
 		return gson.toJson(variables);
 	}
 
