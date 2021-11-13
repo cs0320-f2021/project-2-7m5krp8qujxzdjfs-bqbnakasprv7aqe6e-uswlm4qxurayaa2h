@@ -13,5 +13,5 @@ public interface Mappable {
   /**
    * @return the longitude of this Mappable (in degrees)
    */
-  double getLong();
+  double getLon();
 }

@@ -13,9 +13,9 @@ public class HaversineHeuristic implements Heuristic<Mappable> {
   @Override
   public double getEstimate(Mappable node1, Mappable node2) {
     double node1Lat = Math.toRadians(node1.getLat());
-    double node1Long = Math.toRadians(node1.getLong());
+    double node1Long = Math.toRadians(node1.getLon());
     double node2Lat = Math.toRadians(node2.getLat());
-    double node2Long = Math.toRadians(node2.getLong());
+    double node2Long = Math.toRadians(node2.getLon());
 
     double insideRadical = Math.pow(Math.sin((node2Lat - node1Lat) / 2), 2)
         + (Math.cos(node1Lat) * Math.cos(node2Lat)

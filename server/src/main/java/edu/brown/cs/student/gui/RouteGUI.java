@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 import edu.brown.cs.student.maps.MapsDatabase;
+import edu.brown.cs.student.handlers.maps.RouteHandler;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
@@ -29,13 +30,13 @@ public class RouteGUI implements Route {
 
 		MapsDatabase db = new MapsDatabase("data/maps/smallMaps.sqlite3");
 
-		RouteHandler rh = new RouteHandler();
-		List<List<Double>> route = rh.findNodeRoute("n/0/", "n/1/");
+
+		List<List<Double>> route = RouteHandler.findNodeRoute("n/0/", "n/1/");
 
 		// what if we store each way as a Way object with id, lat, and lon
 		// getWays returns a lst = List<Way>
 		// and then ImmutableMap.of("ways", lst)
-		Map<String, List<List<String>>> variables = ImmutableMap.of("route", route);
+		Map<String, List<List<Double>>> variables = ImmutableMap.of("route", route);
 
 		return gson.toJson(variables);
 	}

@@ -21,7 +21,7 @@ public class MapNodeTest {
     assertEquals(50.0, noder.getCoord(1), 0.1);
     assertEquals("id", noder.getID());
     assertEquals(40.0, noder.getLat(), 0.1);
-    assertEquals(50.0, noder.getLong(), 0.1);
+    assertEquals(50.0, noder.getLon(), 0.1);
   }
 
   @Test
