@@ -7,7 +7,7 @@ import {AwesomeButton} from "react-awesome-button";
 function Route(props) {
 
     function Button(props) {
-        return <AwesomeButton type="primary" onPress={props.onPress}>Button</AwesomeButton>;
+        return <AwesomeButton type="primary" onPress={props.onPress}> Get Route </AwesomeButton>;
     }
     
     //Hint: The defaults for latitudes and longitudes were 0s. What might the default useState value for a route be?
@@ -29,7 +29,6 @@ function Route(props) {
                 "Content-Type": "application/json",
                 'Access-Control-Allow-Origin': '*',
             }
-
         }
 
         axios.post("http://localhost:4567/route", toSend, config)
@@ -43,7 +42,6 @@ function Route(props) {
 
             });
     }
-
 
     return (
         <div className="Route">

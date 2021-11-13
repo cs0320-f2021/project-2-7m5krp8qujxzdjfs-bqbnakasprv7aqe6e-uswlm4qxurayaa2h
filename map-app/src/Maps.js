@@ -6,13 +6,11 @@ function Maps() {
     // Code from Galen's video
     // Initial map view
 
-    //
     // MAX_LAT MIN_LON MIN_LAT MAX_LON
     const INIT_MAX_LAT = 42 // 41.828147
     const INIT_MIN_LON = -72 // -71.407971
     const INIT_MIN_LAT = 41.8 // 41.823142
     const INIT_MAX_LON = -71.3 // -71.392231
-
 
     // ways to pass to the canvas
     const canvasWays = useRef([])
