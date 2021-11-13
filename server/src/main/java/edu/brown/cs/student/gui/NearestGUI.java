@@ -10,7 +10,7 @@ import spark.Response;
 import spark.Route;
 
 /**
- * Nearest GUI
+ * Sample nearest GUI
  *
  */
 public class NearestGUI implements Route {
