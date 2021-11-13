@@ -18,7 +18,7 @@ public interface ValuedEdge<T extends VertexStorable, W extends EdgeStorable> {
   /**
    * Returns the ValuedVertex that this ValuedEdge originated from.
    *
-   * @return The source ValuedEdge
+   * @return The source ValuedVertx
    */
   ValuedVertex<T, W> getSource();
 

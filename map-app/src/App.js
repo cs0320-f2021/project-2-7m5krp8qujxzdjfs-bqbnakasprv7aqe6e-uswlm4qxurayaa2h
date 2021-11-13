@@ -14,7 +14,6 @@ function App() {
         </input>
     }
 
-
     const [startLat, setStartLat] = useState(0);
     const [startLon, setStartLon] = useState(0);
     const [endLat, setEndLat] = useState(0);
@@ -33,8 +32,7 @@ function App() {
                 <TextBox label="Dest Latitude" value={endLat} setter={setEndLat}/>
                 <TextBox label="Dest Longitude" value={endLon} setter={setEndLon}/>
                 <Maps />
-
-                {/*<Route slat={startLat} slong={startLon} elat={endLat} elong={endLon}/>*/}
+                <Route slat={startLat} slong={startLon} elat={endLat} elong={endLon}/>
             </header>
         </div>
     );

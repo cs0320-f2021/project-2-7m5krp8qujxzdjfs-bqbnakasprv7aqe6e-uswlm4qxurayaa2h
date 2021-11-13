@@ -18,7 +18,6 @@ function Canvas(props) {
     const draw = (ctx, canvasWays) => {
         ctx.beginPath()
         ctx.strokeStyle = "#000000"
-        ctx.fillStyle = "#FFFFFF"
         console.log("canvasWays:", canvasWays)
         canvasWays.forEach((way) => {
             console.log("holy shoot y'all")
@@ -36,6 +35,8 @@ function Canvas(props) {
     useEffect(() => {
         if (canvasRef) {
             const ctx = canvasRef.current.getContext('2d')
+            ctx.fillStyle = "#FFFFFF"
+            ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height)
             if (props.ways.current.ways) {
                 draw(ctx, props.ways.current.ways)
             }

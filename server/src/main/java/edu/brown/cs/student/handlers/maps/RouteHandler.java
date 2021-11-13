@@ -1,7 +1,7 @@
 package edu.brown.cs.student.handlers.maps;
 
 import java.util.List;
-
+import java.util.ArrayList;
 import edu.brown.cs.student.graph.Graph;
 import edu.brown.cs.student.graph.GraphSourceParser;
 import edu.brown.cs.student.graph.ValuedEdge;
@@ -131,6 +131,36 @@ public class RouteHandler implements CommandHandler {
           + e.getValue().getId() + System.lineSeparator());
     }
     ParseCommands.setOutputString(outputString.toString());
+  }
+
+  /**
+   * Gives two node ids, finds the route. You can use this in tandem with Nearest to find your routes.
+   * @param start node ID
+   * @param end node ID
+   */
+  public static List<List<Double>> findNodeRoute(String start, String end) {
+    List<List<Double>> route = new ArrayList<>();
+    parser = MapsHandler.getGraphSource();
+    graph = MapsHandler.getGraph();
+    MapNode startNode = parser.getVertexValue(start);
+    MapNode endNode = parser.getVertexValue(end);
+    List<ValuedEdge<MapNode, Way>> path = searcher
+        .search(graph.getVertex(startNode), endNode);
+
+    for (ValuedEdge<MapNode, Way> e : path) {
+      // For your Route GUI Handler, maybe modify this to try to use the getLat and getLong functions instead of getID
+      // Then you can send the quads of [srcLat, srcLong, destLat, destLong] back as a list of coordinates
+      Double srcNodeLon = e.getSource().getValue().getLon();
+      Double srcNodeLat = e.getSource().getValue().getLat();
+      System.out.println(srcNodeLon);
+      System.out.println(srcNodeLat);
+      Double destNodeLon = e.getDest().getValue().getLon();
+      Double destNodeLat = e.getDest().getValue().getLat();
+      System.out.println(destNodeLon);
+      System.out.println(destNodeLat);
+//      route.append([srcNodeLon, srcNodeLat, destNodeLon, destNodeLat]);
+    }
+    return route;
   }
 }
 

@@ -13,29 +13,29 @@ import spark.Response;
 import spark.Route;
 
 /**
- * Ways GUI
+ * Route GUI
  *
  */
-public class WaysGUI implements Route {
+public class RouteGUI implements Route {
 
 	@Override
 	public String handle(Request request, Response response) throws Exception {
 		Gson gson = new Gson();
 		JSONObject data = new JSONObject(request.body());
-		double lat1 = data.getDouble("lat1");
-		double lon1 = data.getDouble("lon1");
-		double lat2 = data.getDouble("lat2");
-		double lon2 = data.getDouble("lon2");
+		double srcLat = data.getDouble("srcelat");
+		double srcLon = data.getDouble("srclong");
+		double destLat = data.getDouble("destlat");
+		double destlong = data.getDouble("destlong");
 
 		MapsDatabase db = new MapsDatabase("data/maps/smallMaps.sqlite3");
 
-		List<List<String>> ways = db.getWindowWays(lat1, lon1, lat2, lon2);
-		System.out.println("asdf"+ways);
+		RouteHandler rh = new RouteHandler();
+		List<List<Double>> route = rh.findNodeRoute("n/0/", "n/1/");
 
 		// what if we store each way as a Way object with id, lat, and lon
 		// getWays returns a lst = List<Way>
 		// and then ImmutableMap.of("ways", lst)
-		Map<String, List<List<String>>> variables = ImmutableMap.of("ways", ways);
+		Map<String, List<List<String>>> variables = ImmutableMap.of("route", route);
 
 		return gson.toJson(variables);
 	}

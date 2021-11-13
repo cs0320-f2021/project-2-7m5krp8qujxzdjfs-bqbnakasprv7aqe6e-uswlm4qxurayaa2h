@@ -127,7 +127,7 @@ public class MapNode implements KDTreeNode, VertexStorable, Mappable {
   }
 
   @Override
-  public double getLong() {
+  public double getLon() {
     return getCoord(1);
   }
 }
