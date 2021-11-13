@@ -46,10 +46,9 @@ function Route(props) {
     return (
         <div className="Route">
             <header className="Route-header">
-                <Button onPress={requestRoute}/>
                 <br></br>
-                Route Title! here it is. <br></br>
-                {route}
+                <Button onPress={requestRoute}/>
+                {/*{route}*/}
             </header>
         </div>
     );

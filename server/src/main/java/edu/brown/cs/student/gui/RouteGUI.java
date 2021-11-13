@@ -28,7 +28,7 @@ public class RouteGUI implements Route {
 		double destLat = data.getDouble("destlat");
 		double destlong = data.getDouble("destlong");
 
-		MapsDatabase db = new MapsDatabase("data/maps/smallMaps.sqlite3");
+		MapsDatabase db = new MapsDatabase("data/maps/brown.sqlite3");
 
 
 		List<List<Double>> route = RouteHandler.findNodeRoute("n/0/", "n/1/");

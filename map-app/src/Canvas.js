@@ -4,10 +4,10 @@ function Canvas(props) {
     const canvasRef = useRef(null)
 
     const coordToXY = (coord, width, height) => {
-        const lat = coord[0]
-        const lon = coord[1]
+        const lat = coord[1]
+        const lon = coord[0]
         const widthPercent = (lon - props.minLon) / (props.maxLon - props.minLon)
-        const heightPercent = (lat - props.minLat) / (props.maxLat - props.minLat)
+        const heightPercent = (props.maxLat - lat) / (props.maxLat - props.minLat) //(lat - props.minLat) / (props.maxLat - props.minLat)
         const x = width * widthPercent
         const y = height * heightPercent
         return [x, y]
@@ -18,14 +18,13 @@ function Canvas(props) {
     const draw = (ctx, canvasWays) => {
         ctx.beginPath()
         ctx.strokeStyle = "#000000"
-        console.log("canvasWays:", canvasWays)
+        // console.log("canvasWays:", canvasWays)
         canvasWays.forEach((way) => {
-            console.log("holy shoot y'all")
-            const startCoord = [way[1], way[2]]
-            const endCoord = [way[3], way[4]]
+            const startCoord = [way[2], way[1]]
+            const endCoord = [way[4], way[3]]
+            console.log(startCoord, endCoord)
             let startXY = coordToXY(startCoord, canvasRef.current.width, canvasRef.current.height)
             let endXY = coordToXY(endCoord, canvasRef.current.width, canvasRef.current.height)
-            console.log("coordxys", startXY, endXY)
             ctx.moveTo(startXY[0], startXY[1])
             ctx.lineTo(endXY[0], endXY[1])
         })

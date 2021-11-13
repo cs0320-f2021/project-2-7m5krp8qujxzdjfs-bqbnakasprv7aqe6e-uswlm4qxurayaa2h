@@ -27,11 +27,11 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
+                <Maps />
                 <TextBox label="Source Latitude" value={startLat} setter={setStartLat}/>
                 <TextBox label="Source Longitude" value={startLon} setter={setStartLon}/>
                 <TextBox label="Dest Latitude" value={endLat} setter={setEndLat}/>
                 <TextBox label="Dest Longitude" value={endLon} setter={setEndLon}/>
-                <Maps />
                 <Route slat={startLat} slong={startLon} elat={endLat} elong={endLon}/>
             </header>
         </div>
