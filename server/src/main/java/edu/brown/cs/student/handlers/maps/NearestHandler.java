@@ -32,7 +32,7 @@ public class NearestHandler implements CommandHandler {
 
           mapfinder.nearestFind(MapsDatabase.getMapTree());
           
-          // For your Nearest GUI, try to use getLat and getLong, instead of getID, 
+          // For your Nearest GUI, try to use getLat and getLon, instead of getID,
           // and send those back to the React Server
           ParseCommands.setOutputString(mapfinder.getBestNode().getID());
 

@@ -1,11 +1,17 @@
 import './App.css';
 import Route from './Route.js';
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {AwesomeButton} from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
 import Maps from "./Maps";
+import ScreenReader from "./ScreenReader"
 
 function App() {
+
+    useEffect(() => {
+        ScreenReader()
+    }, [])
+
     function TextBox(props) {
         return <input type="text"
                       label={props.label}
@@ -26,6 +32,7 @@ function App() {
 
     return (
         <div className="App">
+            <ScreenReader/>
             <header className="App-header">
                 <TextBox label="Source Latitude" value={startLat} setter={setStartLat}/>
                 <TextBox label="Source Longitude" value={startLon} setter={setStartLon}/>
@@ -37,5 +44,6 @@ function App() {
         </div>
     );
 }
+
 
 export default App;
