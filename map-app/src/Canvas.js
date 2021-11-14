@@ -21,7 +21,6 @@ function Canvas(props) {
         ctx.lineWidth = 1
         // console.log("canvasWays:", canvasWays)
         canvasWays.forEach((way) => {
-            console.log("way[0]:", way[0])
             const startCoord = [way[2], way[1]]
             const endCoord = [way[4], way[3]]
             let startXY = coordToXY(startCoord, canvasRef.current.width, canvasRef.current.height)
