@@ -347,6 +347,7 @@ public class MapsDatabase implements GraphSourceParser {
     } catch (SQLException e) {
       throw new IllegalArgumentException("Invalid database.");
     }
+
   }
 
   @Override

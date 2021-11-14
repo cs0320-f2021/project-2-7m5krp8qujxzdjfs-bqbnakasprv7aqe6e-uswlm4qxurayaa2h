@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import Canvas from "./Canvas";
+import Route from "./Route";
 
 function Maps() {
 
@@ -21,8 +22,15 @@ function Maps() {
     // whether or not the ways have been fetched yet
     const [waysFetched, setWaysFetched] = useState(false)
 
+    // the route being fetched
+    const [route, setRoute] = useState([]);
+
+    // whether or not the ways have been fetched yet
+    const [routeFetched, setRouteFetched] = useState(false)
+
     // whether or not there are ways loading
     const [loading, setLoading] = useState(true)
+
 
     // the current map view
     const [mapView, setMapView] = useState({
@@ -81,7 +89,9 @@ function Maps() {
     return (
         <div className="Maps">
             <Canvas mapView={mapView} ways={canvasWays} waysFetched={waysFetched} setMapView={setMapView}
-                    minLat={INIT_MIN_LAT} maxLon={INIT_MAX_LON} maxLat={INIT_MAX_LAT} minLon={INIT_MIN_LON}/>
+                    minLat={INIT_MIN_LAT} maxLon={INIT_MAX_LON} maxLat={INIT_MAX_LAT} minLon={INIT_MIN_LON}
+                    routeFetched={routeFetched} route={route}/>
+            <Route setRouteFetched={setRouteFetched} setRoute={setRoute}/>
         </div>
 
     );

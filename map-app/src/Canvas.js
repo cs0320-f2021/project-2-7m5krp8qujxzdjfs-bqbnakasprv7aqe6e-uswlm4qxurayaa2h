@@ -13,15 +13,34 @@ function Canvas(props) {
         return [x, y]
     }
 
-    // { ["name": "Waterman St", "startCoord": [lon, lat], "endCoord": ],
-    //   ["name": "Thayer St", "startCoord": [lon, lat], "endCoord": [lon, lat]] }
+    // {["id": , "startCoord": [lat, lon], "endCoord": [lat, lon]],
+    //   ["id": , "startCoord": [lat, lon], "endCoord": [lat, lon]] }
     const draw = (ctx, canvasWays) => {
         ctx.beginPath()
         ctx.strokeStyle = "#000000"
+        ctx.lineWidth = 1
         // console.log("canvasWays:", canvasWays)
         canvasWays.forEach((way) => {
+            console.log("way[0]:", way[0])
             const startCoord = [way[2], way[1]]
             const endCoord = [way[4], way[3]]
+            let startXY = coordToXY(startCoord, canvasRef.current.width, canvasRef.current.height)
+            let endXY = coordToXY(endCoord, canvasRef.current.width, canvasRef.current.height)
+            ctx.moveTo(startXY[0], startXY[1])
+            ctx.lineTo(endXY[0], endXY[1])
+        })
+        ctx.stroke()
+    }
+
+    // draw a route on the canvas
+    const drawRoute = (ctx, route) => {
+        ctx.beginPath()
+        ctx.strokeStyle = "#ff00d7"
+        ctx.lineWidth = 3
+        route.forEach((w) => {
+            // [sLon sLat eLon eLat]
+            const startCoord = [w[0], w[1]]
+            const endCoord = [w[2], w[3]]
             console.log(startCoord, endCoord)
             let startXY = coordToXY(startCoord, canvasRef.current.width, canvasRef.current.height)
             let endXY = coordToXY(endCoord, canvasRef.current.width, canvasRef.current.height)
@@ -31,7 +50,7 @@ function Canvas(props) {
         ctx.stroke()
     }
 
-    useEffect(() => {
+    const drawAllWays = () => {
         if (canvasRef) {
             const ctx = canvasRef.current.getContext('2d')
             ctx.fillStyle = "#FFFFFF"
@@ -39,9 +58,20 @@ function Canvas(props) {
             if (props.ways.current.ways) {
                 draw(ctx, props.ways.current.ways)
             }
-
         }
+    }
+
+    useEffect(() => {
+        drawAllWays()
     }, [props.waysFetched])
+
+    useEffect(() => {
+        drawAllWays()
+        if (canvasRef) {
+            const ctx = canvasRef.current.getContext('2d')
+            drawRoute(ctx, props.route)
+        }
+    }, [props.routeFetched])
 
     return (
         <div style={{border: "1px solid black", width: "min-content", height: "min-content"}}>

@@ -140,25 +140,25 @@ public class RouteHandler implements CommandHandler {
    */
   public static List<List<Double>> findNodeRoute(String start, String end) {
     List<List<Double>> route = new ArrayList<>();
-    parser = MapsHandler.getGraphSource();
-    graph = MapsHandler.getGraph();
+    GraphSourceParser parser = MapsHandler.getGraphSource();
+    Graph<MapNode, Way> graph = MapsHandler.getGraph();
     MapNode startNode = parser.getVertexValue(start);
     MapNode endNode = parser.getVertexValue(end);
     List<ValuedEdge<MapNode, Way>> path = searcher
         .search(graph.getVertex(startNode), endNode);
 
+
     for (ValuedEdge<MapNode, Way> e : path) {
-      // For your Route GUI Handler, maybe modify this to try to use the getLat and getLong functions instead of getID
-      // Then you can send the quads of [srcLat, srcLong, destLat, destLong] back as a list of coordinates
+      List node = new ArrayList();
       Double srcNodeLon = e.getSource().getValue().getLon();
       Double srcNodeLat = e.getSource().getValue().getLat();
-      System.out.println(srcNodeLon);
-      System.out.println(srcNodeLat);
+      node.add(srcNodeLon);
+      node.add(srcNodeLat);
       Double destNodeLon = e.getDest().getValue().getLon();
-      Double destNodeLat = e.getDest().getValue().getLat();
-      System.out.println(destNodeLon);
-      System.out.println(destNodeLat);
-//      route.append([srcNodeLon, srcNodeLat, destNodeLon, destNodeLat]);
+      Double destNodeLat = e.getDe+st().getValue().getLat();
+      node.add(destNodeLon);
+      node.add(destNodeLat);
+      route.add(node);
     }
     return route;
   }

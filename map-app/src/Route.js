@@ -1,27 +1,41 @@
 // import './Route.css';
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {AwesomeButton} from "react-awesome-button";
 
 function Route(props) {
+    function TextBox(props) {
+        return <input type="text"
+                      placeholder={props.label}
+                      value={props.value}
+                      onChange={(input) => props.setter(input.target.value)}>
+        </input>
+    }
+
+    const [routeSlat, setRouteSlat] = useState("");
+    const [routeSlong, setRouteSlong] = useState("");
+    const [routeElat, setRouteElat] = useState("");
+    const [routeElong, setRouteElong] = useState("");
 
     function Button(props) {
         return <AwesomeButton type="primary" onPress={props.onPress}> Get Route </AwesomeButton>;
     }
     
     //Hint: The defaults for latitudes and longitudes were 0s. What might the default useState value for a route be?
-    const [route, setRoute] = useState(0);
+
 
     /**
      * Makes an axios request.
      */
     const requestRoute = () => {
+        props.setRoute([]);
+        props.setRouteFetched(false);
         const toSend = {
-            srclat: props.slat,
-            srclong: props.slong,
-            destlat: props.elat,
-            destlong: props.elong
+            srclat: routeSlat,
+            srclong: routeSlong,
+            destlat: routeElat,
+            destlong: routeElong
         };
 
         let config = {
@@ -34,7 +48,8 @@ function Route(props) {
         axios.post("http://localhost:4567/route", toSend, config)
             .then(response => {
                 console.log(response.data);
-                setRoute(response.data["route"]);
+                props.setRoute(response.data["route"]);
+                props.setRouteFetched(true);
             })
 
             .catch(function (error) {
@@ -43,12 +58,17 @@ function Route(props) {
             });
     }
 
+
     return (
         <div className="Route">
             <header className="Route-header">
-                <br></br>
+                <TextBox label="Source Latitude" value={routeSlat} setter={setRouteSlat}/><br/>
+                <TextBox label="Source Longitude" value={routeSlong} setter={setRouteSlong}/>  <br/>
+                <TextBox label="Dest Latitude" value={routeElat} setter={setRouteElat}/> <br/>
+                <TextBox label="Dest Longitude" value={routeElong} setter={setRouteElong}/> <br/>
+                <br/>
                 <Button onPress={requestRoute}/>
-                {/*{route}*/}
+                <br/>
             </header>
         </div>
     );
