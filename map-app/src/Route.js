@@ -3,27 +3,14 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {AwesomeButton} from "react-awesome-button";
+import TextBox from "./TextBox";
 
 function Route(props) {
-    function TextBox(props) {
-        return <input type="text"
-                      placeholder={props.label}
-                      value={props.value}
-                      onChange={(input) => props.setter(input.target.value)}>
-        </input>
-    }
 
     const [routeSlat, setRouteSlat] = useState("");
     const [routeSlong, setRouteSlong] = useState("");
     const [routeElat, setRouteElat] = useState("");
     const [routeElong, setRouteElong] = useState("");
-
-    function Button(props) {
-        return <AwesomeButton type="primary" onPress={props.onPress}> Get Route </AwesomeButton>;
-    }
-    
-    //Hint: The defaults for latitudes and longitudes were 0s. What might the default useState value for a route be?
-
 
     /**
      * Makes an axios request.
@@ -62,12 +49,12 @@ function Route(props) {
     return (
         <div className="Route">
             <header className="Route-header">
-                <TextBox label="Source Latitude" value={routeSlat} setter={setRouteSlat}/><br/>
-                <TextBox label="Source Longitude" value={routeSlong} setter={setRouteSlong}/>  <br/>
-                <TextBox label="Dest Latitude" value={routeElat} setter={setRouteElat}/> <br/>
-                <TextBox label="Dest Longitude" value={routeElong} setter={setRouteElong}/> <br/>
+                <TextBox label={"Source Latitude"} setter={setRouteSlat}/>
+                <TextBox label={"Source Longitude"} setter={setRouteSlong}/>
+                <TextBox label={"Destination Latitude"} setter={setRouteElat}/>
+                <TextBox label={"Destination Longitude"} setter={setRouteElong}/>
                 <br/>
-                <Button onPress={requestRoute}/>
+                <AwesomeButton type={"primary"} onPress={requestRoute}> Get Route </AwesomeButton>
                 <br/>
             </header>
         </div>
