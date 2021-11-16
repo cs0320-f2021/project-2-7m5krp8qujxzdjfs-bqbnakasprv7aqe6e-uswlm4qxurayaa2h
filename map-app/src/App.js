@@ -1,7 +1,9 @@
 import './App.css';
+import {useEffect, useRef, useState} from "react";
 import {AwesomeButton} from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
 import Maps from "./Maps";
+import ScreenReader from "./ScreenReader";
 
 function App() {
     // function TextBox(props) {
@@ -20,7 +22,8 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <Maps />
+                <ScreenReader/>
+                <Maps/>
             </header>
         </div>
     );

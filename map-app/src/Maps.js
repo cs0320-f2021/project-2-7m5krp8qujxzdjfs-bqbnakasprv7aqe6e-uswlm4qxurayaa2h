@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import Canvas from "./Canvas";
 import Route from "./Route";
+import ScreenReader from "./ScreenReader";
 
 function Maps() {
 
@@ -37,6 +38,10 @@ function Maps() {
         "northwest" : [INIT_MAX_LAT, INIT_MIN_LON],
         "southeast" : [INIT_MIN_LAT, INIT_MAX_LON]
     })
+
+    // useEffect(() => {
+    //     ScreenReader()
+    // }, [])
 
     useEffect(() => {
         requestWays().then(ways => {
@@ -93,7 +98,6 @@ function Maps() {
                     routeFetched={routeFetched} route={route}/>
             <Route setRouteFetched={setRouteFetched} setRoute={setRoute}/>
         </div>
-
     );
 }
 
