@@ -100,7 +100,7 @@ function Maps() {
     async function panOver(direction) {
         setWaysFetched(false)
         const lat_increment = 0.0015
-        const lon_increment = 0.0005
+        const lon_increment = 0.0005 
 
         if (direction === "N") {
             INIT_MIN_LAT += lat_increment

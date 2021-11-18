@@ -106,6 +106,7 @@ public class MapsDatabase implements GraphSourceParser {
       output = new ArrayList<>();
       PreparedStatement prep;
       // Pulling the three relevant node characteristics
+      // TODO add in bounding box
       prep = conn.prepareStatement(
           "SELECT DISTINCT node.id, node.latitude, node.longitude FROM node " +
               "JOIN way ON (node.id = way.start OR node.id = way.end) " +

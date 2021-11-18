@@ -32,7 +32,7 @@ public class WaysGUI implements Route {
 		System.out.println(lat2);
 		System.out.println(lon2);
 
-		MapsDatabase db = new MapsDatabase("data/maps/brown.sqlite3"); //maps.sqlite3
+		MapsDatabase db = new MapsDatabase("data/maps/brown.sqlite3"); //maps.sqlite3, brown.sqlite3
 
 		List<List<String>> ways = db.getWindowWays(lat1, lon1, lat2, lon2);
 		System.out.println("WaysGUI ways: " + ways);

@@ -3,13 +3,21 @@ import {useEffect, useRef} from "react";
 function Canvas(props) {
     const canvasRef = useRef(null)
 
-    const coordToXY = (coord, width, height) => {
+    const HEIGHT = 500
+    const WIDTH = 500
+
+    const coordToXY = (coord) => {
         const lat = coord[1]
+        console.log("lat", lat)
         const lon = coord[0]
+        console.log("lon", lon)
         const widthPercent = (lon - props.minLon) / (props.maxLon - props.minLon)
+        console.log("widthPercent ", widthPercent)
         const heightPercent = (props.maxLat - lat) / (props.maxLat - props.minLat) //(lat - props.minLat) / (props.maxLat - props.minLat)
-        const x = width * widthPercent
-        const y = height * heightPercent
+        // const heightPercent = (lat - props.minLat) / (props.maxLat - props.minLat)
+        console.log("heightPercent ", heightPercent)
+        const x = WIDTH * widthPercent
+        const y = HEIGHT * heightPercent
         return [x, y]
     }
 
@@ -23,8 +31,8 @@ function Canvas(props) {
         canvasWays.forEach((way) => {
             const startCoord = [way[2], way[1]]
             const endCoord = [way[4], way[3]]
-            let startXY = coordToXY(startCoord, canvasRef.current.width, canvasRef.current.height)
-            let endXY = coordToXY(endCoord, canvasRef.current.width, canvasRef.current.height)
+            let startXY = coordToXY(startCoord)
+            let endXY = coordToXY(endCoord)
             ctx.moveTo(startXY[0], startXY[1])
             ctx.lineTo(endXY[0], endXY[1])
         })
@@ -75,7 +83,7 @@ function Canvas(props) {
 
     return (
         <div style={{border: "1px solid black", width: "min-content", height: "min-content"}}>
-            <canvas ref={canvasRef} width={500} height={500}/>
+            <canvas ref={canvasRef} width={WIDTH} height={HEIGHT}/>
         </div>
     );
 }
