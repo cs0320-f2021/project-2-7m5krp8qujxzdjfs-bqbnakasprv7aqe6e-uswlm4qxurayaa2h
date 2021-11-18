@@ -121,7 +121,7 @@ function Maps() {
     return (
         <div className="Maps">
             <Canvas mapView={mapView} ways={canvasWays} waysFetched={waysFetched} setMapView={setMapView}
-                    minLat={INIT_MIN_LAT} maxLon={INIT_MAX_LON} maxLat={INIT_MAX_LAT} minLon={INIT_MIN_LON}
+                    minLat={mapView["southeast"][0]} maxLon={mapView["southeast"][1]} maxLat={mapView["northwest"][0]} minLon={mapView["northwest"][1]}
                     routeFetched={routeFetched} route={route}/>
             <Route setRouteFetched={setRouteFetched} setRoute={setRoute}/>
             <AwesomeButton type="primary" onPress={() => panOver("N")}> North </AwesomeButton>

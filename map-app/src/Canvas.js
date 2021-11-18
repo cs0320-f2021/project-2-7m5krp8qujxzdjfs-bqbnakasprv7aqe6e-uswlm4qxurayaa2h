@@ -50,8 +50,8 @@ function Canvas(props) {
             const startCoord = [w[0], w[1]]
             const endCoord = [w[2], w[3]]
             console.log(startCoord, endCoord)
-            let startXY = coordToXY(startCoord, canvasRef.current.width, canvasRef.current.height)
-            let endXY = coordToXY(endCoord, canvasRef.current.width, canvasRef.current.height)
+            let startXY = coordToXY(startCoord)
+            let endXY = coordToXY(endCoord)
             ctx.moveTo(startXY[0], startXY[1])
             ctx.lineTo(endXY[0], endXY[1])
         })
