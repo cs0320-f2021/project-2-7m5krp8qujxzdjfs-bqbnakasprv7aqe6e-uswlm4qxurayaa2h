@@ -99,23 +99,29 @@ function Maps() {
 
     async function panOver(direction) {
         setWaysFetched(false)
-        const lat_increment = 0.0015
-        const lon_increment = 0.0005 
+        const lat_increment = 0.0005
+        const lon_increment = 0.0005
+
+        let maxLat = mapView.northwest[0]
+        let minLon = mapView.northwest[1]
+        let minLat = mapView.southeast[0]
+        let maxLon = mapView.southeast[1]
+
 
         if (direction === "N") {
-            INIT_MIN_LAT += lat_increment
-            INIT_MAX_LAT += lat_increment
+            minLat += lat_increment
+            maxLat += lat_increment
         } else if (direction === "S") {
-            INIT_MIN_LAT -= lat_increment
-            INIT_MAX_LAT -= lat_increment
+            minLat -= lat_increment
+            maxLat -= lat_increment
         } else if (direction === "E") {
-            INIT_MIN_LON += lon_increment
-            INIT_MAX_LON += lon_increment
+            minLon += lon_increment
+            maxLon += lon_increment
         } else if (direction === "W") {
-            INIT_MIN_LON -= lon_increment
-            INIT_MAX_LON -= lon_increment
+            minLon -= lon_increment
+            maxLon -= lon_increment
         }
-        setMapView({"northwest": [INIT_MAX_LAT, INIT_MIN_LON], "southeast": [INIT_MIN_LAT, INIT_MAX_LON]})
+        setMapView({"northwest": [maxLat, minLon], "southeast": [minLat, maxLon]})
     }
 
     return (
@@ -124,10 +130,13 @@ function Maps() {
                     minLat={mapView["southeast"][0]} maxLon={mapView["southeast"][1]} maxLat={mapView["northwest"][0]} minLon={mapView["northwest"][1]}
                     routeFetched={routeFetched} route={route}/>
             <Route setRouteFetched={setRouteFetched} setRoute={setRoute}/>
-            <AwesomeButton type="primary" onPress={() => panOver("N")}> North </AwesomeButton>
-            <AwesomeButton type="primary" onPress={() => panOver("S")}> South </AwesomeButton>
-            <AwesomeButton type="primary" onPress={() => panOver("E")}> East </AwesomeButton>
-            <AwesomeButton type="primary" onPress={() => panOver("W")}> West </AwesomeButton>
+            <hr />
+            <AwesomeButton ripple size="8px" type="secondary" onPress={() => panOver("N")}> North </AwesomeButton>
+            <br />
+            <AwesomeButton ripple size="8px" type="secondary" onPress={() => panOver("W")}> West </AwesomeButton> <AwesomeButton ripple size="8px" type="secondary" onPress={() => panOver("E")}> East </AwesomeButton>
+            <br />
+            <AwesomeButton ripple size="8px" type="secondary" onPress={() => panOver("S")}> South </AwesomeButton>
+
         </div>
     );
 }

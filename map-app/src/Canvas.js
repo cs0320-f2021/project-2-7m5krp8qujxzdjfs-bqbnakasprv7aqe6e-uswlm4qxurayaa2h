@@ -82,7 +82,7 @@ function Canvas(props) {
     }, [props.routeFetched])
 
     return (
-        <div style={{border: "1px solid black", width: "min-content", height: "min-content"}}>
+        <div>
             <canvas ref={canvasRef} width={WIDTH} height={HEIGHT}/>
         </div>
     );
