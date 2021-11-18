@@ -30,7 +30,7 @@ public class RouteGUI implements Route {
 		double destLat = data.getDouble("destlat");
 		double destLon = data.getDouble("destlong");
 
-		String mapFilePath = "data/maps/brown.sqlite3";
+		String mapFilePath = "data/maps/maps.sqlite3"; //maps.sqlite3
 		MapsDatabase db = new MapsDatabase(mapFilePath);
 		MapsHandler.setMapData(db);
 

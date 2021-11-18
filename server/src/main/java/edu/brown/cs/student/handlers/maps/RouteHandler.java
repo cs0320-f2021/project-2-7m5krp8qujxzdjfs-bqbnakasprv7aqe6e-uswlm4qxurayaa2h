@@ -155,7 +155,7 @@ public class RouteHandler implements CommandHandler {
       node.add(srcNodeLon);
       node.add(srcNodeLat);
       Double destNodeLon = e.getDest().getValue().getLon();
-      Double destNodeLat = e.getDe+st().getValue().getLat();
+      Double destNodeLat = e.getDest().getValue().getLat();
       node.add(destNodeLon);
       node.add(destNodeLat);
       route.add(node);

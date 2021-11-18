@@ -31,23 +31,23 @@ public class MapsDatabaseTest {
     db = new MapsDatabase("data/maps/modifiedSmallMaps.sqlite3");
   }
 
-  @Test
-  public void getWaysTest() {
-    // One way
-    List<String> expectedOneWay = new ArrayList<>();
-    expectedOneWay.add("/w/8");
-    assertEquals(expectedOneWay, db.getWays(44.1, -72.1, 42, -71.9));
-    // Inclusive of the boundary
-    assertEquals(expectedOneWay, db.getWays(44.1, -72.1, 44, -72));
-    // Does not filter out any ways
-    List<String> allWays = new ArrayList<>();
-    for (int i = 0; i < 10; i++) {
-      allWays.add("/w/" + i);
-    }
-    assertEquals(allWays, db.getWays(44.1, -72.1, 40, -70));
-    // No ways
-    assertEquals(Collections.EMPTY_LIST, db.getWays(45, -73, 44.5, -72.9));
-  }
+//  @Test
+//  public void getWaysTest() {
+//    // One way
+//    List<String> expectedOneWay = new ArrayList<>();
+//    expectedOneWay.add("/w/8");
+//    assertEquals(expectedOneWay, db.getWays(44.1, -72.1, 42, -71.9));
+//    // Inclusive of the boundary
+//    assertEquals(expectedOneWay, db.getWays(44.1, -72.1, 44, -72));
+//    // Does not filter out any ways
+//    List<String> allWays = new ArrayList<>();
+//    for (int i = 0; i < 10; i++) {
+//      allWays.add("/w/" + i);
+//    }
+//    assertEquals(allWays, db.getWays(44.1, -72.1, 40, -70));
+//    // No ways
+//    assertEquals(Collections.EMPTY_LIST, db.getWays(45, -73, 44.5, -72.9));
+//  }
 
   @Test
   public void getIntersectionTest() {

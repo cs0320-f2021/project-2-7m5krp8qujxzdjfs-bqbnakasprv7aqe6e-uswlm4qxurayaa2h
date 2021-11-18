@@ -27,10 +27,15 @@ public class WaysGUI implements Route {
 		double lat2 = data.getDouble("lat2");
 		double lon2 = data.getDouble("lon2");
 
-		MapsDatabase db = new MapsDatabase("data/maps/brown.sqlite3");
+		System.out.println(lat1);
+		System.out.println(lon1);
+		System.out.println(lat2);
+		System.out.println(lon2);
+
+		MapsDatabase db = new MapsDatabase("data/maps/brown.sqlite3"); //maps.sqlite3
 
 		List<List<String>> ways = db.getWindowWays(lat1, lon1, lat2, lon2);
-		System.out.println("asdf"+ways);
+		System.out.println("WaysGUI ways: " + ways);
 
 		// what if we store each way as a Way object with id, lat, and lon
 		// getWays returns a lst = List<Way>

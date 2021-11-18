@@ -94,16 +94,35 @@ public class MapsDatabase implements GraphSourceParser {
    *
    * @return a list of all traversable and nontraversable ways from this database.
    */
-  public List<MapNode> getAllWays() {
+  public List<MapNode> getAllWays(double lat1, double lon1, double lat2, double lon2) {
     List<MapNode> output = null;
+
+//    * @param lat1 the northern position of the bounding box.
+//    * @param lon1 the western position of the bounding box.
+//    * @param lat2 the southern position of the bounding box.
+//    * @param lon2 the eastern position of the bounding box.
 
     try {
       output = new ArrayList<>();
       PreparedStatement prep;
       // Pulling the three relevant node characteristics
       prep = conn.prepareStatement(
-          "SELECT DISTINCT node.id, node.latitude, node.longitude FROM node JOIN way ON "
-              + "(node.id = way.start OR node.id = way.end);");
+          "SELECT DISTINCT node.id, node.latitude, node.longitude FROM node " +
+              "JOIN way ON (node.id = way.start OR node.id = way.end) " +
+              "WHERE node.latitude < ? AND node.latitude > ? " +
+              "AND node.longitude > ? AND node.longitude < ? ;"
+              );
+
+      //ACTUAL lat1=-71.392231 lat2=41.823142 lon1=-71.407971 lon2=-71.392231
+      //where node.latitude < 41.828147 and node.latitude > 41.823142 and node.longitude > -71.407971 and node.longitude < -71.392231;
+
+//      "WHERE way.type <> 'unclassified' " +
+//          "AND way.type <> '';"
+      prep.setString(1, String.valueOf(lat1));
+      prep.setString(2, String.valueOf(lat2));
+      prep.setString(3, String.valueOf(lon1));
+      prep.setString(4, String.valueOf(lon2));
+      System.out.println(String.valueOf(lat1) + " " + String.valueOf(lat2) + " " + String.valueOf(lon1) + " " + String.valueOf(lon2));
       ResultSet result = prep.executeQuery();
       while (result.next()) {
         MapNode node = new MapNode(result.getString(1), result.getDouble(2),
@@ -156,13 +175,14 @@ public class MapsDatabase implements GraphSourceParser {
     List<String> output = new ArrayList<>();
 
     // get a list of all the traversable ways we have
-    List<MapNode> mapNodes = getTraversableWays();
+    List<MapNode> mapNodes = getAllWays(lat1, lon1, lat2, lon2);
 
     // filter that list based on which mapnodes are within lat inputs
     // then get all of the sets of ways for each node and combine those sets
     Set<Way> allWays = new HashSet<>();
     for (MapNode mn : mapNodes) {
-      if ((mn.getCoord(0) <= lat1 && mn.getCoord(0) >= lat2) && (mn.getCoord(1) >= lon1 && mn.getCoord(1) <= lon2))  {
+      if ((mn.getCoord(0) <= lat1 && mn.getCoord(0) >= lat2) &&
+          (mn.getCoord(1) >= lon1 && mn.getCoord(1) <= lon2))  {
         //get the ways and add to allWays
         Set<Way> mnWays = getAllEdgeValues(mn);
         allWays.addAll(mnWays);
@@ -196,7 +216,7 @@ public class MapsDatabase implements GraphSourceParser {
     List<List<String>> output = new ArrayList<>();
 
     // get a list of all the traversable ways we have
-    List<MapNode> mapNodes = getAllWays();
+    List<MapNode> mapNodes = getAllWays(lat1, lon1, lat2, lon2);
 
     // filter that list based on which mapnodes are within lat inputs
     // then get all of the sets of ways for each node and combine those sets
