@@ -1,7 +1,9 @@
+import './Maps.css'
 import {useEffect, useRef, useState} from "react";
 import Canvas from "./Canvas";
 import Route from "./Route";
 import {AwesomeButton} from "react-awesome-button";
+import './Awesome.css'
 
 function Maps() {
 
@@ -99,7 +101,7 @@ function Maps() {
 
     async function panOver(direction) {
         setWaysFetched(false)
-        const lat_increment = 0.0005
+        const lat_increment = 0.0002
         const lon_increment = 0.0005
 
         let maxLat = mapView.northwest[0]
@@ -129,14 +131,18 @@ function Maps() {
             <Canvas mapView={mapView} ways={canvasWays} waysFetched={waysFetched} setMapView={setMapView}
                     minLat={mapView["southeast"][0]} maxLon={mapView["southeast"][1]} maxLat={mapView["northwest"][0]} minLon={mapView["northwest"][1]}
                     routeFetched={routeFetched} route={route}/>
-            <Route setRouteFetched={setRouteFetched} setRoute={setRoute}/>
-            <hr />
-            <AwesomeButton ripple size="8px" type="secondary" onPress={() => panOver("N")}> North </AwesomeButton>
-            <br />
-            <AwesomeButton ripple size="8px" type="secondary" onPress={() => panOver("W")}> West </AwesomeButton> <AwesomeButton ripple size="8px" type="secondary" onPress={() => panOver("E")}> East </AwesomeButton>
-            <br />
-            <AwesomeButton ripple size="8px" type="secondary" onPress={() => panOver("S")}> South </AwesomeButton>
-
+            <div class="wrapper">
+                <div class="one">
+                <Route setRouteFetched={setRouteFetched} setRoute={setRoute} style={{marginBottom:18}}/>
+                </div>
+                <div class="two">
+                <AwesomeButton ripple size="8px" type="primary" onPress={() => panOver("N")} style={{marginBottom:3}}> ↑ </AwesomeButton>
+                <br />
+                <AwesomeButton ripple size="8px" type="primary" onPress={() => panOver("W")} style={{marginBottom:3}}> ← </AwesomeButton> <AwesomeButton ripple size="8px" type="primary" onPress={() => panOver("E")} style={{marginBottom:3}}> → </AwesomeButton>
+                <br />
+                <AwesomeButton ripple size="8px" type="primary" onPress={() => panOver("S")}> ↓ </AwesomeButton>
+                </div>
+            </div>
         </div>
     );
 }

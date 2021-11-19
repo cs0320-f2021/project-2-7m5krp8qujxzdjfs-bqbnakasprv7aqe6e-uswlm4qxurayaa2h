@@ -43,7 +43,7 @@ function Canvas(props) {
     // draw a route on the canvas
     const drawRoute = (ctx, route) => {
         ctx.beginPath()
-        ctx.strokeStyle = "#ff00d7"
+        ctx.strokeStyle = "#1dc717"
         ctx.lineWidth = 3
         route.forEach((w) => {
             // [sLon sLat eLon eLat]

@@ -53,8 +53,7 @@ function Route(props) {
                 <TextBox label={"Source Longitude"} setter={setRouteSlong}/>
                 <TextBox label={"Destination Latitude"} setter={setRouteElat}/>
                 <TextBox label={"Destination Longitude"} setter={setRouteElong}/>
-                <br/>
-                <AwesomeButton type={"primary"} onPress={requestRoute}> Get Route </AwesomeButton>
+                <AwesomeButton type={"primary"} onPress={requestRoute} style={{marginTop:8, marginBottom:8}}> Get Route </AwesomeButton>
                 <br/>
             </header>
         </div>
